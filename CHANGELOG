@@ -1,0 +1,187 @@
+# Changelog
+
+## 10-07-2024
+
+### Changes
+
+- Added New Product Management (Alpha test) in the Admin Panel.
+- Product Management now supports viewing, creating, and deleting products.
+- Added and updated some inputs component.
+- Added image downsizing feature during upload.
+- Refactored System Notifications.
+
+## 29-06-2024
+
+### Changes
+
+- Added Attribute Management in the Admin Panel.
+- Attribute Management now supports pagination and search via URL.
+- Improved pagination, search component.
+
+## 24-06-2024
+
+### Changes
+
+- Added Category Management in the Admin Panel.
+- Category Management now supports pagination and search via URL.
+- Refactored System Notifications using Toastify.
+
+## 13-06-2024
+
+### Changes
+
+- Refactored all product filters.
+- Filters can now search, sort, and filter via the search URL.
+
+## 10-06-2024
+
+### Changes
+
+- All product page can now sort products by featured, latest, price ascending, and price descending.
+- Added a list view for all product page.
+- Added a utils folder and refactored code to get formatting scripts from utils.
+
+## 08-06-2024
+
+### Changes
+
+- Updated logout feature using logout API.
+- Refactored some logic bugs.
+- Checkout page now automatically redirects to login if you are not logged in.
+
+## 04-06-2024
+
+### Changes
+
+- Added User Security Page.
+- Users can now change their passwords using Email OTP verification.
+
+## 02-06-2024
+
+### Changes
+
+- Added Dashboard in Admin Panel.
+- Refactored some UI, Responsive
+
+## 31-05-2024
+
+### Changes
+
+- Refactored the Product Detail UI.
+- Improved Product Description by implementing RichTextEditor for more detailed content creation.
+- Utilized dotenv for improved management of API configuration.
+
+## 28-05-2024
+
+### Changes
+
+- Refactored the Create Customer and Create Product modals into a single page.
+
+## 27-05-2024
+
+### Changes
+
+- Refactored pagination, search, and filter functionalities on the All Products Page.
+
+## 25-05-2024
+
+### Fixed
+
+Fixed issue where the Admin Panel's Customer, Product, and Order sections were missing page and limit parameters.
+
+### Changes
+
+- Refactored Login Page, Sign Up Page.
+
+## 23-05-2024
+
+### Changes
+
+- Added Order History in User Profile.
+
+## 22-05-2024
+
+### Changes
+
+- In the Admin Panel, Product Management now able to search products by name, and allows filtering products by category, gender, brand, stock status, product status.
+- In the Admin Panel, Order Management now able to search orders by customer's name, email, phone number, and allows filtering orders by Payment Method, Progress Status, Order Status.
+
+## 21-05-2024
+
+### Changes
+
+- In the Admin Panel, User Management now able to search users by fullname, username, email, and phone number, and allows filtering users by gender and join date.
+
+## 20-05-2024
+
+### Changes
+
+- Added Checkout Page.
+- Users can now create orders.
+- The Checkout Page now automatically updates stock status when loading products.
+
+## 17-05-2024
+
+### Changes
+
+- Added Product Page with CRUD functionality, pagination, and able to select the number of rows per page.
+- Product Page features now include the ability to select and delete multiple products.
+
+## 16-05-2024
+
+### Changes
+
+- Added Customer Page with CRUD functionality, pagination, and able to select the number of rows per page.
+- Customer Page features now include the ability to select and delete multiple users.
+
+## 14-05-2024
+
+### Fixed
+
+- Fixed issue where Protected Routes did not wait for logged-in user data before rendering.
+- Fixed issue where guests (not logged in) could access the Admin Panel.
+
+### Changes
+
+- Added Protected Routes to prevent unauthorized users from accessing Admin pages.
+- Added Admin Panel, Sidebar
+- Refactored Router using RouterProvider, createBrowserRouter
+
+## 13-05-2024
+
+### Changes
+
+- Added User Profile and User Addresses Pages.
+- Features:
+  - Users can now update their information.
+  - Users can add, update, and delete delivery addresses.
+- Refactored System Alerts, User Navbar Dropdown, etc...
+
+## 11-05-2024
+
+### Fixed
+
+- A bug occurs in Product Detail when server data is not yet ready or loaded.
+
+### Changes
+
+- Refactored Product Filtering to be processed in the backend server instead of the frontend.
+- Updated product filter to include more details, added products count for each category.
+
+## 09-05-2024
+
+### Changes
+
+- Added Shopping Cart Page, Navbar Shopping Cart.
+- Added Empty Cart Component, Forbidden Cart Component, Cart Billings Component.
+- Refactored All Product Filter Navbar Bottom.
+
+## 08-05-2024
+
+- Initialize Changelog
+
+### Changes
+
+- Added Product Detail Page.
+- Added Product Detail Quick View Modal.
+- Refactored Product Grid Cards.
