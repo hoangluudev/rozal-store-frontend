@@ -1,17 +1,10 @@
 import * as React from "react";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  Typography,
-  Link,
-  Button,
-  Stack,
-} from "@mui/material";
+import { AppBar, Box, Toolbar, Typography, Button, Stack } from "@mui/material";
 import MenuSideBar from "./sidebar/menusidebar";
 import ElevationScroll from "./props/navbarProp";
 import UserCartDropdown from "./sidebar/UserCartDropdown";
 import UserDropdown from "./sidebar/UserDropdown";
+import { Link } from "react-router-dom";
 
 const navButtons = [
   { label: "Home", path: "/" },
@@ -30,11 +23,10 @@ const HeaderNavBar = () => {
         <Toolbar style={{ paddingRight: "0", justifyContent: "space-between" }}>
           <Typography variant="h5" component="div">
             <Link
-              href="/"
-              underline="none"
+              to="/"
               color="inherit"
               className="text-uppercase"
-              sx={{
+              style={{
                 "&:hover": {
                   textDecoration: "none",
                   color: "#fd4848",
@@ -47,8 +39,8 @@ const HeaderNavBar = () => {
                   textDecoration: "none",
                   color: "inherit",
                 },
+                fontSize: "20px",
               }}
-              fontSize={{ xs: "20px", sm: "26px" }}
             >
               <Typography
                 component={"span"}
@@ -97,7 +89,7 @@ const HeaderNavBar = () => {
           </Box>
           <Stack flexDirection="row" alignItems="center" columnGap={1}>
             <UserCartDropdown />
-            <UserDropdown />    
+            <UserDropdown />
             <MenuSideBar />
           </Stack>
         </Toolbar>
