@@ -4,7 +4,6 @@ import {
   Card,
   CardMedia,
   CardContent,
-  Link,
   Typography,
   IconButton,
   Stack,
@@ -13,7 +12,11 @@ import {
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { ProductDetailQuickView } from "./ProductDetailQuickView.component";
-import { convertToCurrency, getDiscountPercenage } from "../../../utils/formatting";
+import {
+  convertToCurrency,
+  getDiscountPercenage,
+} from "../../../utils/formatting";
+import { Link } from "react-router-dom";
 
 export const ProductListView = ({ ProductData }) => {
   const [openModalDetail, setOpenModalDetail] = React.useState(false);

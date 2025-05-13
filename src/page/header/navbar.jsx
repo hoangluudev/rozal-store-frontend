@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Link } from "react-router-dom";
 import { AppBar, Box, Toolbar, Typography, Button, Stack } from "@mui/material";
 import MenuSideBar from "./sidebar/menusidebar";
@@ -23,28 +22,29 @@ const HeaderNavBar = () => {
           <Typography variant="h5" component="div">
             <Link
               to="/"
-              color="inherit"
-              className="text-uppercase"
               style={{
+                color: "inherit",
+                fontSize: "20px",
+                textTransform: "uppercase",
+                textDecoration: "none",
                 "&:hover": {
-                  textDecoration: "none",
                   color: "#fd4848",
                 },
                 "&:active": {
-                  textDecoration: "none",
                   color: "inherit",
                 },
                 "&:focus": {
-                  textDecoration: "none",
                   color: "inherit",
                 },
-                fontSize: "20px",
               }}
             >
               <Typography
                 component={"span"}
-                fontSize={{ xs: "20px", sm: "26px" }}
-                className="fw-bold me-2"
+                sx={{
+                  fontSize: "20px",
+                  fontWeight: 600,
+                  mr: 1,
+                }}
               >
                 Rozal
               </Typography>
@@ -61,6 +61,8 @@ const HeaderNavBar = () => {
             {navButtons.map((button, index) => (
               <Button
                 key={index}
+                component={Link}
+                to={button.path}
                 sx={{
                   my: 2,
                   px: "1rem",
@@ -80,7 +82,6 @@ const HeaderNavBar = () => {
                     color: "inherit",
                   },
                 }}
-                href={button.path}
               >
                 {button.label}
               </Button>

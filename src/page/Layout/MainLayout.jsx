@@ -5,7 +5,7 @@ import FooterSection from "../footer/footer";
 import { Box } from "@mui/material";
 import useLoadInitialData from "../../hooks/useLoadInitialData";
 
-export const UserLayout = () => {
+export const MainLayout = () => {
   useLoadInitialData("user");
   return (
     <React.Fragment>

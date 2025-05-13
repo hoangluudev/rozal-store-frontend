@@ -1,6 +1,6 @@
 import { NavigateNext } from "@mui/icons-material";
-import { Breadcrumbs, Typography, Link } from "@mui/material";
-import React from "react";
+import { Breadcrumbs, Typography, Link as LinkMUI } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const BreadcrumbsComponent = ({ breadcrumbList = [], textProps = {} }) => {
   return (
@@ -16,15 +16,16 @@ const BreadcrumbsComponent = ({ breadcrumbList = [], textProps = {} }) => {
               {item.title}
             </Typography>
           ) : (
-            <Link
+            <LinkMUI
               key={index}
+              component={Link}
               underline="hover"
               color="inherit"
-              href={item.path}
+              to={item.path}
               sx={textProps}
             >
               {item.title || "..."}
-            </Link>
+            </LinkMUI>
           )
         )
       ) : (

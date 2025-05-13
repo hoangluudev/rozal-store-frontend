@@ -1,11 +1,12 @@
 import * as React from "react";
 import { useScrollTrigger } from "@mui/material";
 import PropTypes from "prop-types";
-
-const isHomePage = window.location.pathname;
+import { useLocation } from "react-router-dom";
 
 function ScrollHandler(props) {
   const { children, window } = props;
+  const currentPath = useLocation().pathname;
+
   const trigger = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
@@ -17,10 +18,10 @@ function ScrollHandler(props) {
     style: {
       backgroundColor: trigger
         ? "#232223"
-        : isHomePage === "/"
+        : currentPath === "/"
         ? "transparent"
         : "#232223",
-      position: isHomePage === "/" ? "fixed" : trigger ? "fixed" : "static",
+      position: currentPath === "/" ? "fixed" : trigger ? "fixed" : "static",
       transition: trigger ? "0.3s" : "0.5s",
       padding: trigger ? "0.3rem 0" : "0",
       boxShadow: "none",

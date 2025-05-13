@@ -16,13 +16,13 @@ const AdminAuthentication = ({ childComponent }) => {
     }
     if (isLoggedIn === null) {
       setLoading(false);
-      navigate("/page-forbidden", { replace: true });
+      navigate("/forbidden", { replace: true });
     }
   }, [currentUserData, isAdminRole, isLoggedIn, navigate]);
   React.useEffect(() => {
     if (!loading) {
       if (currentUserData && isAdminRole === false) {
-        navigate("/page-forbidden", { replace: true });
+        navigate("/forbidden", { replace: true });
       }
     }
   }, [loading, currentUserData, isAdminRole, navigate]);

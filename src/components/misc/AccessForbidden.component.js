@@ -1,4 +1,5 @@
 import { Button, Skeleton } from "@mui/material";
+import { Link } from "react-router-dom";
 
 export const AccessForbiddenPage = () => {
   return (
@@ -16,10 +17,16 @@ export const AccessForbiddenPage = () => {
           You don't have permissions to access this page.
         </h5>
         <Button
-          className="px-5 py-3 mt-4"
+          component={Link}
+          to="/"
+          sx={{
+            px: 5,
+            py: 3,
+            mt: 4,
+            "&:hover": { color: "#fff" },
+          }}
           variant="contained"
           color="error"
-          href="/"
         >
           Back to Home
         </Button>

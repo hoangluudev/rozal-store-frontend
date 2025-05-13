@@ -1,7 +1,7 @@
-import React from "react";
-import { Typography, Link } from "@mui/material";
+import { Typography, Link as LinkMUI } from "@mui/material";
 import { KeyboardDoubleArrowRight } from "@mui/icons-material";
 import FeaturedProduct from "./products/featuredproducts";
+import { Link } from "react-router-dom";
 
 const FeaturedProductSection = () => {
   return (
@@ -19,13 +19,18 @@ const FeaturedProductSection = () => {
             variant="body1"
             className="d-flex justify-content-end mb-0"
           >
-            <Link
-              href="/products"
-              className="d-flex align-items-end text-decoration-none"
+            <LinkMUI
+              component={Link}
+              to="/products"
+              sx={{
+                display: "flex",
+                alignItems: "flex-end",
+                textDecoration: "none",
+              }}
             >
               <span>View all</span>
               <KeyboardDoubleArrowRight fontSize="medium" />
-            </Link>
+            </LinkMUI>
           </Typography>
         </div>
         <div className="products">

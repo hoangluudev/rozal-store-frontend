@@ -1,13 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 //  Layout
 import { AppLayout } from "./page/Layout/AppLayout";
-import { UserLayout } from "./page/Layout/UserLayout";
+import { MainLayout } from "./page/Layout/MainLayout";
 import { AdminLayout } from "./page/Layout/AdminLayout";
 import { SinglePage } from "./components/misc/SinglePage";
-import { BlankParentLayout } from "./page/Layout/BlankParentLayout";
+import { StandaloneLayout } from "./page/Layout/StandaloneLayout";
 //  User
 import { HomePageSection } from "./page/body/HomePage";
-import { AllProductPage } from "./page/body/AllProducts";
 import UserProfilePage from "./page/body/UserProfilePage";
 import { UserAccount } from "./components/UserProfile/Profile";
 import { UserSecurity } from "./components/UserProfile/Security";
@@ -54,16 +53,15 @@ export const Router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: "/",
-        element: <UserLayout />,
+        element: <MainLayout />,
         children: [
           {
-            path: "/",
+            index: true,
             element: <HomePageSection />,
-          },     
+          },
           {
             path: "products",
-            element: <BlankParentLayout />,
+            element: <StandaloneLayout />,
             children: [
               {
                 path: "",
@@ -80,11 +78,12 @@ export const Router = createBrowserRouter([
             element: <IsLoggedIn childComponent={<ShoppingCartPage />} />,
           },
           {
-            path: "/user",
+            path: "user",
             element: <UserProfilePage />,
             children: [
               {
                 path: "profile",
+                index: true,
                 element: <UserAccount />,
               },
               {
@@ -93,7 +92,7 @@ export const Router = createBrowserRouter([
               },
               {
                 path: "order",
-                element: <BlankParentLayout />,
+                element: <StandaloneLayout />,
                 children: [
                   {
                     path: "",
@@ -116,11 +115,11 @@ export const Router = createBrowserRouter([
             ],
           },
           {
-            path: "/checkout",
+            path: "checkout",
             element: <IsLoggedIn childComponent={<CheckoutPage />} />,
           },
           {
-            path: "/order/order-success/:orderCode",
+            path: "order/order-success/:orderCode",
             element: <IsLoggedIn childComponent={<OrderSuccessPage />} />,
           },
           {
@@ -130,100 +129,131 @@ export const Router = createBrowserRouter([
         ],
       },
       {
-        path: "/admin-panel",
-        element: <AdminAuthentication childComponent={<AdminLayout />} />,
+        element: <StandaloneLayout />,
         children: [
           {
-            path: "",
-            element: <AdminPanelPage />,
+            path: "login",
+            element: (
+              <IsAlreadyLoggedIn
+                childComponent={<SinglePage childComponent={<LoginPage />} />}
+              />
+            ),
+          },
+          {
+            path: "sign-up",
+            element: (
+              <IsAlreadyLoggedIn
+                childComponent={<SinglePage childComponent={<SignUpPage />} />}
+              />
+            ),
+          },
+          {
+            path: "admin-panel",
+            element: <AdminAuthentication childComponent={<AdminLayout />} />,
             children: [
               {
-                path: "dashboard",
-                element: <AdminDashboard />,
-              },
-              {
-                path: "order",
-                element: <ManageOrderComponent />,
-              },
-              {
-                path: "product",
-                element: <BlankParentLayout />,
+                element: <AdminPanelPage />,
                 children: [
                   {
-                    path: "",
-                    element: <ManageProductComponent />,
+                    path: "dashboard",
+                    index: true,
+                    element: <AdminDashboard />,
                   },
                   {
-                    path: "add-product",
-                    element: <CreateProductComponent />,
-                  },
-                ],
-              },
-              {
-                path: "product-alpha",
-                element: <BlankParentLayout />,
-                children: [
-                  {
-                    path: "",
-                    element: <ManageProductAlphaComponent />,
+                    path: "order",
+                    element: <ManageOrderComponent />,
                   },
                   {
-                    path: "view/id/:productId",
-                    element: <ViewProductDetail />,
-                  },
-                  {
-                    path: "edit/id/:productId",
-                    element: <EditProductAlphaComponent />,
-                  },
-                  {
-                    path: "add-product-alpha",
-                    element: <CreateProductAlphaComponent />,
-                  },
-                  {
-                    path: "categories",
-                    element: <BlankParentLayout />,
+                    path: "product",
+                    element: <StandaloneLayout />,
                     children: [
                       {
-                        path: "",
-                        element: <ManageCategory />,
+                        index: true,
+                        element: <ManageProductComponent />,
                       },
                       {
-                        path: "add-category",
-                        element: <CreateCategoryComponent />,
-                      },
-                      {
-                        path: "id/:categoryId",
-                        element: <EditCategoryComponent />,
+                        path: "add-product",
+                        element: <CreateProductComponent />,
                       },
                     ],
                   },
                   {
-                    path: "product-types",
-                    element: <BlankParentLayout />,
+                    path: "product-alpha",
+                    element: <StandaloneLayout />,
                     children: [
                       {
-                        path: "",
-                        element: <ManageProductType />,
+                        index: true,
+                        element: <ManageProductAlphaComponent />,
                       },
                       {
-                        path: "add-product-types",
-                        element: <CreateProductTypeComponent />,
+                        path: "view/id/:productId",
+                        element: <ViewProductDetail />,
                       },
                       {
-                        path: "id/:productTypeId",
-                        element: <EditProductTypeComponent />,
+                        path: "edit/id/:productId",
+                        element: <EditProductAlphaComponent />,
+                      },
+                      {
+                        path: "add-product-alpha",
+                        element: <CreateProductAlphaComponent />,
+                      },
+                      {
+                        path: "categories",
+                        element: <StandaloneLayout />,
+                        children: [
+                          {
+                            path: "",
+                            element: <ManageCategory />,
+                          },
+                          {
+                            path: "add-category",
+                            element: <CreateCategoryComponent />,
+                          },
+                          {
+                            path: "id/:categoryId",
+                            element: <EditCategoryComponent />,
+                          },
+                        ],
+                      },
+                      {
+                        path: "product-types",
+                        element: <StandaloneLayout />,
+                        children: [
+                          {
+                            path: "",
+                            element: <ManageProductType />,
+                          },
+                          {
+                            path: "add-product-types",
+                            element: <CreateProductTypeComponent />,
+                          },
+                          {
+                            path: "id/:productTypeId",
+                            element: <EditProductTypeComponent />,
+                          },
+                        ],
                       },
                     ],
                   },
+                  {
+                    path: "customer",
+                    element: <StandaloneLayout />,
+                    children: [
+                      {
+                        index: true,
+                        element: <ManageCustomerComponent />,
+                      },
+                      {
+                        path: "add-customer",
+                        element: <CreateCustomerComponent />,
+                      },
+                    ],
+                  },
+                  {
+                    path: "*",
+                    element: <PageNotFound />,
+                  },
                 ],
-              },
-              {
-                path: "customer",
-                element: <ManageCustomerComponent />,
-              },
-              {
-                path: "customer/add-customer",
-                element: <CreateCustomerComponent />,
               },
               {
                 path: "*",
@@ -232,30 +262,10 @@ export const Router = createBrowserRouter([
             ],
           },
           {
-            path: "*",
-            element: <PageNotFound />,
+            path: "forbidden",
+            element: <AccessForbiddenPage />,
           },
         ],
-      },
-      {
-        path: "/login",
-        element: (
-          <IsAlreadyLoggedIn
-            childComponent={<SinglePage childComponent={<LoginPage />} />}
-          />
-        ),
-      },
-      {
-        path: "/sign-up",
-        element: (
-          <IsAlreadyLoggedIn
-            childComponent={<SinglePage childComponent={<SignUpPage />} />}
-          />
-        ),
-      },
-      {
-        path: "/page-forbidden",
-        element: <AccessForbiddenPage />,
       },
     ],
   },

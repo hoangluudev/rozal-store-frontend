@@ -1,9 +1,9 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardMedia,
   CardContent,
-  Link,
   Typography,
   IconButton,
   Chip,
@@ -15,7 +15,10 @@ import { LoadingElementComponent } from "../../misc/LoadingElement.component";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ProductDetailQuickView } from "./ProductDetailQuickView.component";
-import { convertToCurrency, getDiscountPercenage } from "../../../utils/formatting";
+import {
+  convertToCurrency,
+  getDiscountPercenage,
+} from "../../../utils/formatting";
 
 const responsive = {
   superLargeDesktop: {
@@ -80,8 +83,12 @@ export const MutliProductsCarousel = ({ productData }) => {
                     className="title mb-2"
                   >
                     <Link
-                      href={"/products/product-detail/" + item._id}
-                      className="text-decoration-none fw-bold text-uppercase"
+                      to={"/products/product-detail/" + item._id}
+                      style={{
+                        textDecoration: "none",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                      }}
                     >
                       {item.name}
                     </Link>
