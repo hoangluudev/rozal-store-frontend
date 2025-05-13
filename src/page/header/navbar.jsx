@@ -1,15 +1,14 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import { AppBar, Box, Toolbar, Typography, Button, Stack } from "@mui/material";
 import MenuSideBar from "./sidebar/menusidebar";
 import ElevationScroll from "./props/navbarProp";
 import UserCartDropdown from "./sidebar/UserCartDropdown";
 import UserDropdown from "./sidebar/UserDropdown";
-import { Link } from "react-router-dom";
 
 const navButtons = [
   { label: "Home", path: "/" },
   { label: "Shop", path: "/products" },
-  { label: "Shop Alpha", path: "/products-alpha" },
   { label: "Features", path: "/features" },
   { label: "Blog", path: "/blog" },
   { label: "About", path: "/about" },

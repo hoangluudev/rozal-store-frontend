@@ -60,19 +60,9 @@ export const Router = createBrowserRouter([
           {
             path: "/",
             element: <HomePageSection />,
-          },
+          },     
           {
             path: "products",
-            element: <BlankParentLayout />,
-            children: [
-              {
-                path: "",
-                element: <AllProductPage />,
-              },
-            ],
-          },
-          {
-            path: "products-alpha",
             element: <BlankParentLayout />,
             children: [
               {
