@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Grid, Pagination } from "@mui/material";
-import { useSelector } from "react-redux";
 import { useCustomSearchParams } from "../../hooks/useSearchParams";
+import { useProductApi } from "@/hooks/api";
 
 const PaginationSection = ({ handleScrollToTop }) => {
   const previousPageRef = React.useRef();
@@ -17,7 +17,7 @@ const PaginationSection = ({ handleScrollToTop }) => {
     fetchProductPending,
     productSearchPending,
     productPending,
-  } = useSelector((reduxData) => reduxData.PRODUCTS_REDUCERS);
+  } = useProductApi().state;
 
   const onChangePagination = (event, newPage) => {
     updateSearchParams({ page: newPage });

@@ -9,18 +9,12 @@ import {
   Tooltip,
   Popover,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  onOrderFilter,
-  onOrderSearch,
-} from "../../../actions/admin/orderManagement.action";
+import useOrderManagementApi from "@/hooks/api/useOrderManagementApi";
 
 export const OrderSearchText = () => {
-  const { itemPerPage, isSearchOn } = useSelector(
-    (reduxData) => reduxData.ORDERS_ADMIN_REDUCERS
-  );
+  const { onOrderFilter, onOrderSearch } = useOrderManagementApi;
+  const { itemPerPage, isSearchOn } = useOrderManagementApi.state;
 
-  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [searchText, setSearchText] = React.useState("");
@@ -44,14 +38,14 @@ export const OrderSearchText = () => {
   };
 
   const handleSubmitSearch = () => {
-    dispatch(onOrderFilter(0, itemPerPage, {}));
-    dispatch(onOrderSearch(0, itemPerPage, searchText));
+    onOrderFilter(0, itemPerPage, {});
+    onOrderSearch(0, itemPerPage, searchText);
     handleClose();
   };
 
   const handleResetSearchText = () => {
     setSearchText("");
-    dispatch(onOrderSearch(0, itemPerPage, ""));
+    onOrderSearch(0, itemPerPage, "");
   };
 
   return (

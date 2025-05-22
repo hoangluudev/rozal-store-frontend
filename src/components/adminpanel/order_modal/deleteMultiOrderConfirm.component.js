@@ -10,14 +10,13 @@ import {
   IconButton,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { deleteMultipleOrderByID } from "../../../actions/admin/orderManagement.action";
-import { useDispatch, useSelector } from "react-redux";
+import useOrderManagementApi from "@/hooks/api/useOrderManagementApi";
 
 export const DeleteMultiOrderModal = () => {
-  const dispatch = useDispatch();
-  const { deleteOrderPending, selectedOrderIDs } = useSelector(
-    (reduxData) => reduxData.ORDERS_ADMIN_REDUCERS
-  );
+  const { deleteMultipleOrderByID } = useOrderManagementApi();
+  const { deleteOrderPending, selectedOrderIDs } =
+    useOrderManagementApi().state;
+
   const [openModal, setOpenDeleteModal] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -27,13 +26,13 @@ export const DeleteMultiOrderModal = () => {
     setOpenDeleteModal(false);
   };
   const handleSubmitDelete = () => {
-    dispatch(deleteMultipleOrderByID(selectedOrderIDs));
+    deleteMultipleOrderByID(selectedOrderIDs);
   };
   React.useEffect(() => {
     if (deleteOrderPending) {
       handleClose();
     }
-  }, [dispatch, deleteOrderPending]);
+  }, [deleteOrderPending]);
   return (
     <React.Fragment>
       <Tooltip title="Delete Products">

@@ -12,18 +12,12 @@ import {
   Chip,
 } from "@mui/material";
 import { getComparator, stableSort } from "./order_TableProps";
-import {
-  fetchOrders,
-  getSelectedIDs,
-  onFilteredOrderPageChange,
-  onSearchedOrderPageChange,
-} from "../../../actions/admin/orderManagement.action";
-import { useDispatch, useSelector } from "react-redux";
 import { EditOrderModal } from "../order_modal/editOrderModal.component";
 import { DeleteOrderConfirmModal } from "../order_modal/deleteOrderConfirm.component";
 import { LoadingElementSmallComponent } from "../../misc/LoadingElementSmall.component";
 import { NoDataComponent } from "../../misc/DataNotFound.component";
 import { convertToCurrency, formatDatetime } from "../../../utils/formatting";
+import useOrderManagementApi from "@/hooks/api/useOrderManagementApi";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
@@ -55,14 +49,20 @@ export const OrderTableBody = ({
   setSelectedCell,
   dataRowLists,
 }) => {
-  const dispatch = useDispatch();
+  const {
+    fetchOrders,
+    getSelectedIDs,
+    onFilteredOrderPageChange,
+    onSearchedOrderPageChange,
+  } = useOrderManagementApi();
   const {
     isUpdateOrderSuccess,
     deleteOrderPending,
     itemPerPage,
     isFilterOn,
     isSearchOn,
-  } = useSelector((reduxData) => reduxData.ORDERS_ADMIN_REDUCERS);
+  } = useOrderManagementApi().state;
+
   const isSelected = (id) => selectedCell.indexOf(id) !== -1;
 
   const visibleRows = React.useMemo(
@@ -87,32 +87,34 @@ export const OrderTableBody = ({
       );
     }
     setSelectedCell(newSelected);
-    dispatch(getSelectedIDs(newSelected));
+    getSelectedIDs(newSelected);
   };
   React.useEffect(() => {
     if (deleteOrderPending) {
       setSelectedCell([]);
-      dispatch(getSelectedIDs([]));
+      getSelectedIDs([]);
     }
-  }, [dispatch, deleteOrderPending, setSelectedCell]);
+  }, [deleteOrderPending, getSelectedIDs, setSelectedCell]);
 
   React.useEffect(() => {
     if (isUpdateOrderSuccess || deleteOrderPending) {
       if (isSearchOn) {
-        dispatch(onSearchedOrderPageChange(0, itemPerPage));
+        onSearchedOrderPageChange(0, itemPerPage);
       } else if (isFilterOn) {
-        dispatch(onFilteredOrderPageChange(0, itemPerPage));
+        onFilteredOrderPageChange(0, itemPerPage);
       } else if (!isSearchOn && !isFilterOn) {
-        dispatch(fetchOrders(0, itemPerPage));
+        fetchOrders(0, itemPerPage);
       }
     }
   }, [
-    dispatch,
     itemPerPage,
     isSearchOn,
     isFilterOn,
     isUpdateOrderSuccess,
     deleteOrderPending,
+    onSearchedOrderPageChange,
+    onFilteredOrderPageChange,
+    fetchOrders,
   ]);
 
   return (

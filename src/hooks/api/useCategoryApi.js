@@ -19,7 +19,7 @@ import {
 
 const useCategoryApi = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state.categoryReducer);
+  const state = useSelector((state) => state.adminCategoryReducer);
 
   const fetchCategoryCb = useCallback(
     (query) => {

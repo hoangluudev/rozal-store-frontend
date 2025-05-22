@@ -8,11 +8,10 @@ import {
   Button,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { deleteOrderByID } from "../../../actions/admin/orderManagement.action";
-import { useDispatch } from "react-redux";
+import useOrderManagementApi from "@/hooks/api/useOrderManagementApi";
 
 export const DeleteOrderConfirmModal = ({ selectedOrderID }) => {
-  const dispatch = useDispatch();
+  const { deleteOrderByID } = useOrderManagementApi();
 
   const [openModal, setOpenDeleteModal] = React.useState(false);
 
@@ -23,7 +22,7 @@ export const DeleteOrderConfirmModal = ({ selectedOrderID }) => {
     setOpenDeleteModal(false);
   };
   const handleSubmitDelete = () => {
-    dispatch(deleteOrderByID(selectedOrderID));
+    deleteOrderByID(selectedOrderID);
   };
   return (
     <React.Fragment>

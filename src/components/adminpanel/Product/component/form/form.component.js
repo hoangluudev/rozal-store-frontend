@@ -27,12 +27,15 @@ import {
   FormFieldComponent,
   GridLayoutComponent,
 } from "../../../../common/Layout";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const ProductForm = ({ formData, onChange, formSubmitted }) => {
   const { sendMsgInfo } = useToast();
   const filter = createFilterOptions();
+
   const { productTypeOptions, brandLists, genderOptions, statusOptions } =
-    useSelector((reduxData) => reduxData.PRODUCT_ALPHA_ADMIN_REDUCERS);
+    useProductManagementApi().state;
+
   const [selectedVariants, setSelectedVariants] = React.useState([]);
   const onInputChange = (name, value) => {
     onChange((prevState) => ({

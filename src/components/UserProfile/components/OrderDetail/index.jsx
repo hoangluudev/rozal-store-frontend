@@ -1,11 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  createZaloPaymentRetryRequest,
-  fetchOrderByCode,
-  onRepurchaseOrder,
-} from "../../../../actions/client/order.action";
 import { TitleBlockLayout } from "../../../common/Layout";
 import { Box, Grid, Stack, Typography, useTheme } from "@mui/material";
 import {
@@ -27,14 +21,15 @@ import OrderSummary from "./OrderSummary";
 import ChangeDeliveryAddress from "../../Order/components/ChangeDeliveryAddress";
 import { LoadingElementComponent } from "../../../misc/LoadingElement.component";
 import OrderNotFound from "../../../misc/OrderNotFound";
+import { useOrderApi } from "@/hooks/api";
 
 const OrderDetail = () => {
   const { orderCode } = useParams();
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const { fetchOrderByCodePending, orderDetailItem } = useSelector(
-    (reduxData) => reduxData.ORDER_ALPHA_REDUCERS
-  );
+  const { createZaloPaymentRetryRequest, fetchOrderByCode, onRepurchaseOrder } =
+    useOrderApi();
+  const { fetchOrderByCodePending, orderDetailItem } = useOrderApi().state;
+
   const getStatusColor = (status, type = "text") => {
     const textColors = {
       Unpaid: theme.palette.warning.light,
@@ -85,18 +80,18 @@ const OrderDetail = () => {
     console.log("ButtonComponent clicked");
   };
   const handleBuyAgain = (orderCode) => {
-    dispatch(onRepurchaseOrder(orderCode));
+    onRepurchaseOrder(orderCode);
   };
   const handleRetryPayment = (orderCode) => {
-    dispatch(createZaloPaymentRetryRequest(orderCode));
+    createZaloPaymentRetryRequest(orderCode);
   };
   const hanldeCopyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
   };
 
   React.useEffect(() => {
-    dispatch(fetchOrderByCode(orderCode));
-  }, [dispatch, orderCode]);
+    fetchOrderByCode(orderCode);
+  }, [fetchOrderByCode, orderCode]);
   return (
     <TitleBlockLayout
       primary="Order Detail"

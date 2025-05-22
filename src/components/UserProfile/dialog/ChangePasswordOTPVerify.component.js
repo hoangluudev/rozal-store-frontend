@@ -12,7 +12,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { MuiOtpInput } from "mui-one-time-password-input";
-import { useSelector } from "react-redux";
+import { useCurrentUserApi } from "@/hooks/api";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,7 +24,7 @@ export const ChangePasswordOTP = ({
   onVerifyOTPRequest,
 }) => {
   const { requestChangePasswordResponse, isVerifyOTPChangePasswordValid } =
-    useSelector((reduxData) => reduxData.USER_PROFILE_REDUCERS);
+    useCurrentUserApi().state;
 
   const [isOpenModal, setOpenModal] = React.useState(false);
 

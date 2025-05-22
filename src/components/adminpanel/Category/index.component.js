@@ -12,17 +12,12 @@ import {
 } from "@mui/material";
 import { AddCircle, Autorenew } from "@mui/icons-material";
 import { createData, EnhancedTableHead } from "./props/TableDataset";
-import {
-  deleteMultipleCategoryByID,
-  fetchCategory,
-  getSelectedIDs,
-} from "../../../actions/admin/category.action";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { TablePaginationComponent, TypographyComponent } from "../../common/UI";
 import { SearchParamsDropdown } from "../../common/Input";
 import { TableBodyComponent } from "./props/TableBody";
 import { DeleteMultipleConfirmComponent } from "../../common/Dialog/DeleteConfirm/MultipleDeleteConfirm";
+import { useCategoryApi } from "@/hooks/api";
 
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
@@ -34,8 +29,8 @@ EnhancedTableHead.propTypes = {
 };
 
 export const ManageCategory = () => {
-  const dispatch = useDispatch();
-  const location = useLocation();
+  const { deleteMultipleCategoryByID, fetchCategory, getSelectedIDs } =
+    useCategoryApi();
   const {
     categoryDataLists,
     selectedCategoryIDs,
@@ -47,7 +42,8 @@ export const ManageCategory = () => {
     itemPerPage,
     isSearchOn,
     searchValue,
-  } = useSelector((reduxData) => reduxData.CATEGORY_ADMIN_REDUCERS);
+  } = useCategoryApi().state;
+  const location = useLocation();
 
   const filterValue = location.search;
 
@@ -56,14 +52,13 @@ export const ManageCategory = () => {
   const [selectedCell, setSelectedCell] = React.useState([]);
 
   const EnhancedTableToolbar = (props) => {
-    const dispatch = useDispatch();
     const { numSelected } = props;
 
     const handleRefresh = () => {
-      dispatch(fetchCategory(filterValue));
+      fetchCategory(filterValue);
     };
     const handleDeleteMultiple = () => {
-      dispatch(deleteMultipleCategoryByID(selectedCategoryIDs));
+      deleteMultipleCategoryByID(selectedCategoryIDs);
     };
     return (
       <Toolbar
@@ -137,9 +132,7 @@ export const ManageCategory = () => {
     numSelected: PropTypes.number.isRequired,
   };
 
-  const renderDataList = categoryDataLists || [];
-
-  const renderLists = renderDataList.map((category, index) => {
+  const renderLists = categoryDataLists?.map((category, index) => {
     return createData(
       category._id,
       category.name,
@@ -160,21 +153,26 @@ export const ManageCategory = () => {
     if (event.target.checked) {
       const newSelected = renderLists.map((n) => n.id);
       setSelectedCell(newSelected);
-      dispatch(getSelectedIDs(newSelected));
+      getSelectedIDs(newSelected);
       return;
     }
     setSelectedCell([]);
-    dispatch(getSelectedIDs([]));
+    getSelectedIDs([]);
   };
 
   React.useEffect(() => {
-    dispatch(fetchCategory(filterValue));
-  }, [dispatch, filterValue]);
+    fetchCategory(filterValue);
+  }, [fetchCategory, filterValue]);
   React.useEffect(() => {
     if (isUpdateCategorySuccess || isDeleteCategorySuccess) {
-      dispatch(fetchCategory(filterValue));
+      fetchCategory(filterValue);
     }
-  }, [dispatch, filterValue, isUpdateCategorySuccess, isDeleteCategorySuccess]);
+  }, [
+    filterValue,
+    isUpdateCategorySuccess,
+    isDeleteCategorySuccess,
+    fetchCategory,
+  ]);
 
   return (
     <Box>

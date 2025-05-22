@@ -9,13 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 import { MoreVert, PaidOutlined } from "@mui/icons-material";
-import { useSelector } from "react-redux";
 import { convertToCurrency } from "../../../../utils/formatting";
+import { useDashboardApi } from "@/hooks/api";
 
 export const TotalSales = () => {
-  const { totalSales } = useSelector(
-    (reduxData) => reduxData.ADMIN_DASHBOARD_REDUCERS
-  );
+  const { totalSales } = useDashboardApi().state;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);

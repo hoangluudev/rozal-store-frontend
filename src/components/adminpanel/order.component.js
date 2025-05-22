@@ -14,16 +14,11 @@ import {
 import { Autorenew } from "@mui/icons-material";
 import { createData, EnhancedTableHead } from "./order_props/order_TableProps";
 import { OrderTableBody } from "./order_props/Order_TableBody.component";
-import {
-  fetchOrders,
-  onFilteredOrderPageChange,
-  onSearchedOrderPageChange,
-} from "../../actions/admin/orderManagement.action";
-import { useDispatch, useSelector } from "react-redux";
 import { DeleteMultiOrderModal } from "./order_modal/deleteMultiOrderConfirm.component";
 import { OrderSearchText } from "./order_props/searchDropdown.component";
 import { OrderFilterDropdown } from "./order_props/orderFilterDropdown.component";
 import { OrderTablePagination } from "./order_props/props/TablePagination.component";
+import useOrderManagementApi from "@/hooks/api/useOrderManagementApi";
 
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
@@ -35,7 +30,8 @@ EnhancedTableHead.propTypes = {
 };
 
 export const ManageOrderComponent = () => {
-  const dispatch = useDispatch();
+  const { fetchOrders, onFilteredOrderPageChange, onSearchedOrderPageChange } =
+    useOrderManagementApi();
   const {
     orderDataLists,
     filteredOrderLists,
@@ -44,18 +40,17 @@ export const ManageOrderComponent = () => {
     isSearchOn,
     currentPage,
     itemPerPage,
-  } = useSelector((reduxData) => reduxData.ORDERS_ADMIN_REDUCERS);
+  } = useOrderManagementApi().state;
 
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [selectedCell, setSelectedCell] = React.useState([]);
 
   const EnhancedTableToolbar = (props) => {
-    const dispatch = useDispatch();
     const { numSelected } = props;
 
     const handleReloadOrder = () => {
-      dispatch(fetchOrders(0, 10));
+      fetchOrders(0, 10);
     };
 
     return (
@@ -146,13 +141,21 @@ export const ManageOrderComponent = () => {
 
   React.useEffect(() => {
     if (isSearchOn) {
-      dispatch(onSearchedOrderPageChange(currentPage, itemPerPage));
+      onSearchedOrderPageChange(currentPage, itemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredOrderPageChange(currentPage, itemPerPage));
+      onFilteredOrderPageChange(currentPage, itemPerPage);
     } else {
-      dispatch(fetchOrders(currentPage, itemPerPage));
+      fetchOrders(currentPage, itemPerPage);
     }
-  }, [dispatch, isFilterOn, isSearchOn, currentPage, itemPerPage]);
+  }, [
+    isFilterOn,
+    isSearchOn,
+    currentPage,
+    itemPerPage,
+    onSearchedOrderPageChange,
+    onFilteredOrderPageChange,
+    fetchOrders,
+  ]);
   return (
     <Box>
       <Paper sx={{ mb: 2 }}>

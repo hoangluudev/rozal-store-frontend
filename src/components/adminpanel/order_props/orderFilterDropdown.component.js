@@ -18,12 +18,8 @@ import { FilterAlt } from "@mui/icons-material";
 import { DateRangePicker } from "rsuite";
 import { predefinedRanges } from "./props/predefinedRanges";
 import "rsuite/dist/rsuite.min.css";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  onOrderFilter,
-  onOrderSearch,
-} from "../../../actions/admin/orderManagement.action";
 import { formatDate } from "../../../utils/formatting";
+import useOrderManagementApi from "@/hooks/api/useOrderManagementApi";
 
 const orderStatusOptions = ["pending", "completed", "canceled"];
 const progressStatusOptions = [
@@ -35,10 +31,8 @@ const progressStatusOptions = [
 ];
 
 export const OrderFilterDropdown = () => {
-  const dispatch = useDispatch();
-  const { itemPerPage, isFilterOn } = useSelector(
-    (reduxData) => reduxData.ORDERS_ADMIN_REDUCERS
-  );
+  const { onOrderFilter, onOrderSearch } = useOrderManagementApi();
+  const { itemPerPage, isFilterOn } = useOrderManagementApi().state;
 
   const theme = useTheme();
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
@@ -103,7 +97,7 @@ export const OrderFilterDropdown = () => {
   };
 
   const handleClearFilter = () => {
-    dispatch(onOrderFilter(0, itemPerPage, {}));
+    onOrderFilter(0, itemPerPage, {});
     setDateRange([]);
     setPaymentMethod("");
     setProgressStatus("");
@@ -112,8 +106,8 @@ export const OrderFilterDropdown = () => {
     handleClose();
   };
   const handleSubmitFilter = async () => {
-    await dispatch(onOrderSearch(0, itemPerPage, ""));
-    await dispatch(onOrderFilter(0, itemPerPage, filterInput));
+    await onOrderSearch(0, itemPerPage, "");
+    await onOrderFilter(0, itemPerPage, filterInput);
     handleClose();
   };
 

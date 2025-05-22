@@ -17,16 +17,10 @@ import { Info } from "@mui/icons-material";
 import { getComparator, stableSort } from "./customer_TableProps";
 import { ModalEditCustomer } from "../customer_modal/modalEditCustomer.component";
 import { ModalConfirmDeleteUser } from "../customer_modal/confirmDeleteUser.component";
-import {
-  fetchClients,
-  getSelectedIDs,
-  onFilteredCustomerPageChange,
-  onSearchedCustomerPageChange,
-} from "../../../actions/admin/userManagement.action";
-import { useDispatch, useSelector } from "react-redux";
 import { NoDataComponent } from "../../misc/DataNotFound.component";
 import { LoadingElementSmallComponent } from "../../misc/LoadingElementSmall.component";
 import { formatDatetime, getShortedCharacter } from "../../../utils/formatting";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
@@ -51,7 +45,12 @@ export const CustomerTableBody = ({
   setSelectedCell,
   dataRowLists,
 }) => {
-  const dispatch = useDispatch();
+  const {
+    fetchClients,
+    getSelectedIDs,
+    onFilteredCustomerPageChange,
+    onSearchedCustomerPageChange,
+  } = useUserManagementApi();
   const {
     createCustomerPending,
     updateCustomerPending,
@@ -59,7 +58,8 @@ export const CustomerTableBody = ({
     itemPerPage,
     isSearchOn,
     isFilterOn,
-  } = useSelector((reduxData) => reduxData.USERS_ADMIN_REDUCERS);
+  } = useUserManagementApi().state;
+
   const isSelected = (id) => selectedCell.indexOf(id) !== -1;
   const visibleRows = React.useMemo(
     () => stableSort(dataRowLists, getComparator(order, orderBy)),
@@ -83,33 +83,35 @@ export const CustomerTableBody = ({
       );
     }
     setSelectedCell(newSelected);
-    dispatch(getSelectedIDs(newSelected));
+    getSelectedIDs(newSelected);
   };
   React.useEffect(() => {
     if (deleteUserPending) {
       setSelectedCell([]);
-      dispatch(getSelectedIDs([]));
+      getSelectedIDs([]);
     }
-  }, [dispatch, deleteUserPending, setSelectedCell]);
+  }, [deleteUserPending, getSelectedIDs, setSelectedCell]);
 
   React.useEffect(() => {
     if (createCustomerPending || updateCustomerPending || deleteUserPending) {
       if (isSearchOn) {
-        dispatch(onSearchedCustomerPageChange(0, itemPerPage));
+        onSearchedCustomerPageChange(0, itemPerPage);
       } else if (isFilterOn) {
-        dispatch(onFilteredCustomerPageChange(0, itemPerPage));
+        onFilteredCustomerPageChange(0, itemPerPage);
       } else if (!isSearchOn && !isFilterOn) {
-        dispatch(fetchClients(0, itemPerPage));
+        fetchClients(0, itemPerPage);
       }
     }
   }, [
-    dispatch,
     createCustomerPending,
     itemPerPage,
     deleteUserPending,
     updateCustomerPending,
     isSearchOn,
     isFilterOn,
+    onSearchedCustomerPageChange,
+    onFilteredCustomerPageChange,
+    fetchClients,
   ]);
   return (
     <TableBody>

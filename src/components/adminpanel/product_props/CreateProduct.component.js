@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   FormControl,
@@ -11,17 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import {
-  createNewProduct,
-  fetchProducts,
-} from "../../../actions/admin/productManagement.action";
 import { CreateProductForm } from "./props/createForm.component";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const CreateProductComponent = () => {
-  const dispatch = useDispatch();
-  const { createProductResponse, currentPage, itemPerPage } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS
-  );
+  const { createNewProduct, fetchProducts } = useProductManagementApi();
+  const { createProductResponse, currentPage, itemPerPage } =
+    useProductManagementApi().state;
+
   const [productData, setProductData] = React.useState({
     productStatus: "Draft",
   });
@@ -40,7 +36,7 @@ export const CreateProductComponent = () => {
 
   const handleSubmit = () => {
     setFormSubmitted(true);
-    dispatch(createNewProduct(productData));
+    createNewProduct(productData);
   };
 
   React.useEffect(() => {
@@ -49,11 +45,11 @@ export const CreateProductComponent = () => {
       setProductStatus("Draft");
       setFormSubmitted(false);
     }
-  }, [dispatch, createProductResponse]);
+  }, [createProductResponse]);
 
   React.useEffect(() => {
-    dispatch(fetchProducts(currentPage, itemPerPage));
-  }, [dispatch, currentPage, itemPerPage]);
+    fetchProducts(currentPage, itemPerPage);
+  }, [currentPage, fetchProducts, itemPerPage]);
   return (
     <Paper sx={{ mb: 2, p: 2 }}>
       <Typography

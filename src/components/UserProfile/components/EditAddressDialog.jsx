@@ -8,26 +8,20 @@ import {
   Button,
 } from "@mui/material";
 import { EditOutlined } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
 import { IconButtonComponent } from "../../common/UI";
 import AddressForm from "../forms/AddressForm.component";
-import {
-  fetchCity,
-  fetchDistrict,
-  fetchWard,
-  updateUserAddress,
-} from "../../../actions/userProfile.action";
 import { isEmptyObj } from "../../../utils/formatting";
+import { useCurrentUserApi, useLocationApi } from "@/hooks/api";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const EditUserAddressDialog = ({ selectedAddressData }) => {
-  const dispatch = useDispatch();
-  const { updateUserAddressPending } = useSelector(
-    (reduxData) => reduxData.USER_PROFILE_REDUCERS
-  );
+  const { fetchCity, fetchDistrict, fetchWard } = useLocationApi();
+  const { updateUserAddress } = useCurrentUserApi();
+  const { updateUserAddressPending } = useCurrentUserApi().state;
+
   const [isOpenDialog, setOpenDialog] = React.useState(false);
   const initialFormData = {
     fullName: "",
@@ -75,7 +69,7 @@ const EditUserAddressDialog = ({ selectedAddressData }) => {
           ward_name: "",
         });
         if (value) {
-          dispatch(fetchDistrict(value));
+          fetchDistrict(value);
         }
         break;
       case "district":
@@ -90,7 +84,7 @@ const EditUserAddressDialog = ({ selectedAddressData }) => {
           ward_name: "",
         }));
         if (value) {
-          dispatch(fetchWard(value));
+          fetchWard(value);
         }
         break;
       case "ward":
@@ -110,7 +104,7 @@ const EditUserAddressDialog = ({ selectedAddressData }) => {
 
   const handleSubmit = () => {
     setFormSubmitted(true);
-    dispatch(updateUserAddress(requestData, selectedAddressData._id));
+    updateUserAddress(requestData, selectedAddressData._id);
   };
 
   React.useEffect(() => {
@@ -130,12 +124,12 @@ const EditUserAddressDialog = ({ selectedAddressData }) => {
       setFormSubmitted(false);
       handleCloseDialog();
     }
-  }, [dispatch, updateUserAddressPending]);
+  }, [updateUserAddressPending]);
   React.useEffect(() => {
     if (isOpenDialog) {
-      dispatch(fetchCity());
+      fetchCity();
     }
-  }, [dispatch, isOpenDialog]);
+  }, [fetchCity, isOpenDialog]);
   React.useEffect(() => {
     if (!isEmptyObj(selectedAddressData)) {
       setFormData(selectedAddressData);

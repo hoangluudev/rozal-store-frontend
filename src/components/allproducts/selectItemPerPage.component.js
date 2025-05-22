@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
-import { useSelector } from "react-redux";
 import { useCustomSearchParams } from "../../hooks/useSearchParams";
+import { useProductApi } from "@/hooks/api";
 
 const SelectItemPerPage = () => {
   const { setSearchParamsURLWithResetPage } = useCustomSearchParams();
@@ -9,12 +9,13 @@ const SelectItemPerPage = () => {
   const updateSearchParams = (newParams, newPage) => {
     setSearchParamsURLWithResetPage(newParams, newPage);
   };
+
   const {
     itemPerPage,
     fetchProductPending,
     productSearchPending,
     productPending,
-  } = useSelector((reduxData) => reduxData.PRODUCTS_REDUCERS);
+  } = useProductApi().state;
 
   const handleLimitChange = (event) => {
     const newLimit = event.target.value;

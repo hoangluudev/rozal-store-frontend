@@ -1,33 +1,37 @@
 import { TablePagination } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchProducts,
-  onFilteredProductPageChange,
-  onSearchedProductPageChange,
-} from "../../../../actions/admin/productManagement.action";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const ProductTablePagination = () => {
-  const dispatch = useDispatch();
-  const { totalProductCount, isFilterOn, isSearchOn, currentPage, itemPerPage } =
-    useSelector((reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS);
+  const {
+    fetchProducts,
+    onFilteredProductPageChange,
+    onSearchedProductPageChange,
+  } = useProductManagementApi();
+  const {
+    totalProductCount,
+    isFilterOn,
+    isSearchOn,
+    currentPage,
+    itemPerPage,
+  } = useProductManagementApi().state;
 
   const handleChangePage = (event, newPage) => {
     if (isSearchOn) {
-      dispatch(onSearchedProductPageChange(newPage, itemPerPage));
+      onSearchedProductPageChange(newPage, itemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredProductPageChange(newPage, itemPerPage));
+      onFilteredProductPageChange(newPage, itemPerPage);
     } else {
-      dispatch(fetchProducts(newPage, itemPerPage));
+      fetchProducts(newPage, itemPerPage);
     }
   };
   const handleChangeRowsPerPage = (event) => {
     const gItemPerPage = parseInt(event.target.value, 10);
     if (isSearchOn) {
-      dispatch(onSearchedProductPageChange(0, gItemPerPage));
+      onSearchedProductPageChange(0, gItemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredProductPageChange(0, gItemPerPage));
+      onFilteredProductPageChange(0, gItemPerPage);
     } else {
-      dispatch(fetchProducts(0, gItemPerPage));
+      fetchProducts(0, gItemPerPage);
     }
   };
   return (

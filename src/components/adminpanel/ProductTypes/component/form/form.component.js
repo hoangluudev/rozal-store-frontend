@@ -11,14 +11,12 @@ import {
   UploadSingleImageComponent,
   SelectComponent,
 } from "../../../../common/Input";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCategoryOptions } from "../../../../../actions/admin/category.action";
+import { useCategoryApi } from "@/hooks/api";
 
 export const ProductTypeForm = ({ formData, onChange, formSubmitted }) => {
-  const dispatch = useDispatch();
-  const { categoryOptionsList } = useSelector(
-    (reduxData) => reduxData.CATEGORY_ADMIN_REDUCERS
-  );
+  const { fetchCategoryOptions } = useCategoryApi();
+  const { categoryOptionsList } = useCategoryApi().state;
+
   const onInputChange = (name, value) => {
     onChange((prevState) => ({
       ...prevState,
@@ -26,8 +24,8 @@ export const ProductTypeForm = ({ formData, onChange, formSubmitted }) => {
     }));
   };
   React.useEffect(() => {
-    dispatch(fetchCategoryOptions());
-  }, [dispatch]);
+    fetchCategoryOptions();
+  }, [fetchCategoryOptions]);
   return (
     <Box>
       <GridLayoutComponent

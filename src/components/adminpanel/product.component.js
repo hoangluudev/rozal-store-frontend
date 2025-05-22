@@ -11,23 +11,18 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import { AddCircle, Autorenew } from "@mui/icons-material";
 import {
   createData,
   EnhancedTableHead,
 } from "./product_props/product_TableProps";
 import { ProductTableBody } from "./product_props/Product_TableBody.component";
-import {
-  fetchProducts,
-  onFilteredProductPageChange,
-  onSearchedProductPageChange,
-} from "../../actions/admin/productManagement.action";
-import { useDispatch, useSelector } from "react-redux";
 import { DeleteMultiProductModal } from "./product_modal/deleteMultiProductConfirm.component";
 import { ProductSearchText } from "./product_props/searchDropdown.component";
 import { ProductFilterDropdown } from "./product_props/productFilterDropdown.component";
 import { ProductTablePagination } from "./product_props/props/TablePagination.component";
-import { Link } from "react-router-dom";
+import { useProductManagementApi } from "@/hooks/api";
 
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
@@ -39,7 +34,11 @@ EnhancedTableHead.propTypes = {
 };
 
 export const ManageProductComponent = () => {
-  const dispatch = useDispatch();
+  const {
+    fetchProducts,
+    onFilteredProductPageChange,
+    onSearchedProductPageChange,
+  } = useProductManagementApi();
   const {
     productDataLists,
     searchedProductLists,
@@ -48,18 +47,17 @@ export const ManageProductComponent = () => {
     isSearchOn,
     currentPage,
     itemPerPage,
-  } = useSelector((reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS);
+  } = useProductManagementApi().state;
 
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [selectedCell, setSelectedCell] = React.useState([]);
 
   const EnhancedTableToolbar = (props) => {
-    const dispatch = useDispatch();
     const { numSelected } = props;
 
     const handleReloadProduct = () => {
-      dispatch(fetchProducts(0, 10));
+      fetchProducts(0, 10);
     };
 
     return (
@@ -165,13 +163,21 @@ export const ManageProductComponent = () => {
 
   React.useEffect(() => {
     if (isSearchOn) {
-      dispatch(onSearchedProductPageChange(currentPage, itemPerPage));
+      onSearchedProductPageChange(currentPage, itemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredProductPageChange(currentPage, itemPerPage));
+      onFilteredProductPageChange(currentPage, itemPerPage);
     } else {
-      dispatch(fetchProducts(currentPage, itemPerPage));
+      fetchProducts(currentPage, itemPerPage);
     }
-  }, [dispatch, currentPage, itemPerPage, isFilterOn, isSearchOn]);
+  }, [
+    currentPage,
+    itemPerPage,
+    isFilterOn,
+    isSearchOn,
+    onSearchedProductPageChange,
+    onFilteredProductPageChange,
+    fetchProducts,
+  ]);
   return (
     <Box>
       <Paper sx={{ mb: 2 }}>

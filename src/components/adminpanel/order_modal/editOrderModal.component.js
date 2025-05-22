@@ -13,17 +13,12 @@ import {
   Typography,
 } from "@mui/material";
 import { EditNote } from "@mui/icons-material";
-import {
-  updateOrderByID,
-  fetchOrders,
-} from "../../../actions/admin/orderManagement.action";
-import { useDispatch, useSelector } from "react-redux";
+import useOrderManagementApi from "@/hooks/api/useOrderManagementApi";
 
 export const EditOrderModal = ({ selectedOrderData }) => {
-  const dispatch = useDispatch();
-  const { currentPage, itemPerPage, updateOrderPending } = useSelector(
-    (reduxData) => reduxData.ORDERS_ADMIN_REDUCERS
-  );
+  const { updateOrderByID, fetchOrders } = useOrderManagementApi();
+  const { currentPage, itemPerPage, updateOrderPending } =
+    useOrderManagementApi().state;
 
   const orderStatusOptions = ["pending", "completed", "canceled"];
   const progressStatusOptions = [
@@ -68,15 +63,15 @@ export const EditOrderModal = ({ selectedOrderData }) => {
   };
 
   const handleSubmitOrder = () => {
-    dispatch(updateOrderByID(orderForm, selectedOrderData.id));
+    updateOrderByID(orderForm, selectedOrderData.id);
   };
 
   React.useEffect(() => {
     if (updateOrderPending) {
-      dispatch(fetchOrders(currentPage, itemPerPage));
+      fetchOrders(currentPage, itemPerPage);
       handleCloseModal();
     }
-  }, [dispatch, currentPage, itemPerPage, updateOrderPending]);
+  }, [currentPage, fetchOrders, itemPerPage, updateOrderPending]);
   React.useEffect(() => {
     if (selectedOrderData) {
       setOrderStatus(selectedOrderData.status);

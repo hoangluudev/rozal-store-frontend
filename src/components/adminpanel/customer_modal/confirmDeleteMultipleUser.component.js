@@ -10,14 +10,12 @@ import {
   IconButton,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { deleteMultipleUserByID } from "../../../actions/admin/userManagement.action";
-import { useDispatch, useSelector } from "react-redux";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 export const ModalConfirmDeleteMultipleUser = () => {
-  const dispatch = useDispatch();
-  const { deleteUserPending, selectedUserIDs } = useSelector(
-    (reduxData) => reduxData.USERS_ADMIN_REDUCERS
-  );
+  const { deleteMultipleUserByID } = useUserManagementApi();
+  const { deleteUserPending, selectedUserIDs } = useUserManagementApi().state;
+
   const [openModal, setOpenDeleteModal] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -27,13 +25,13 @@ export const ModalConfirmDeleteMultipleUser = () => {
     setOpenDeleteModal(false);
   };
   const handleSubmitDelete = () => {
-    dispatch(deleteMultipleUserByID(selectedUserIDs));
+    deleteMultipleUserByID(selectedUserIDs);
   };
   React.useEffect(() => {
     if (deleteUserPending) {
       handleClose();
     }
-  }, [dispatch, deleteUserPending]);
+  }, [deleteUserPending]);
   return (
     <React.Fragment>
       <Tooltip title="Delete Users">

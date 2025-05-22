@@ -14,12 +14,11 @@ import {
   RemoveShoppingCartOutlined,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDashboardApi } from "@/hooks/api";
 
 export const OrderStatsDashBoard = () => {
-  const { totalOrderCount } = useSelector(
-    (reduxData) => reduxData.ADMIN_DASHBOARD_REDUCERS
-  );
+  const { totalOrderCount } = useDashboardApi().state;
+
   const [selectDataset, setSelectDataset] = React.useState("today");
 
   const handleDatasetChange = (event, newDataset) => {

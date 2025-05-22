@@ -1,17 +1,17 @@
 import * as React from "react";
 import { Box, Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useSelector } from "react-redux";
+
 import { LoadingElementComponent } from "../../misc/LoadingElement.component";
 import { ProductNotFoundComponent } from "../../misc/NoProductFound.component";
 import { ProductGridCards } from "../../allproducts/product/ProductsGridCard.component";
 import { ProductListView } from "./ProductListView.component";
 import { ViewList, ViewModule } from "@mui/icons-material";
 import { ProductPageNotAvailable } from "../../misc/ProductPageNotAvailable.component";
+import { useProductApi } from "@/hooks/api";
 
 export const AllProductsComponent = () => {
-  const { productLists, fetchProductPending, isPageUnavailable } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_REDUCERS
-  );
+  const { productLists, fetchProductPending, isPageUnavailable } =
+    useProductApi().state;
 
   const renderProductData = productLists || [];
 

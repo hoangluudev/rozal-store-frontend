@@ -16,18 +16,13 @@ import {
   EnhancedTableHead,
 } from "./customer_props/customer_TableProps";
 import { CustomerTableBody } from "./customer_props/Customer_TableBody.component";
-import {
-  fetchClients,
-  onFilteredCustomerPageChange,
-  onSearchedCustomerPageChange,
-} from "../../actions/admin/userManagement.action";
-import { useDispatch, useSelector } from "react-redux";
 import { ModalConfirmDeleteMultipleUser } from "./customer_modal/confirmDeleteMultipleUser.component";
 import { CustomerSearchText } from "./customer_props/searchDropdown.component";
 import { CustomerFilterDropdown } from "./customer_props/customerFilterDropdown.component";
 import { PersonAdd } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { CustomerTablePagination } from "./customer_props/props/TablePagination.component";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
@@ -39,7 +34,11 @@ EnhancedTableHead.propTypes = {
 };
 
 export const ManageCustomerComponent = () => {
-  const dispatch = useDispatch();
+  const {
+    fetchClients,
+    onFilteredCustomerPageChange,
+    onSearchedCustomerPageChange,
+  } = useUserManagementApi();
   const {
     customerDataLists,
     filteredCustomerLists,
@@ -48,7 +47,7 @@ export const ManageCustomerComponent = () => {
     isSearchOn,
     currentPage,
     itemPerPage,
-  } = useSelector((reduxData) => reduxData.USERS_ADMIN_REDUCERS);
+  } = useUserManagementApi().state;
 
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
@@ -149,13 +148,21 @@ export const ManageCustomerComponent = () => {
 
   React.useEffect(() => {
     if (isSearchOn) {
-      dispatch(onSearchedCustomerPageChange(currentPage, itemPerPage));
+      onSearchedCustomerPageChange(currentPage, itemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredCustomerPageChange(currentPage, itemPerPage));
+      onFilteredCustomerPageChange(currentPage, itemPerPage);
     } else {
-      dispatch(fetchClients(currentPage, itemPerPage));
+      fetchClients(currentPage, itemPerPage);
     }
-  }, [dispatch, isFilterOn, isSearchOn, currentPage, itemPerPage]);
+  }, [
+    isFilterOn,
+    isSearchOn,
+    currentPage,
+    itemPerPage,
+    onSearchedCustomerPageChange,
+    onFilteredCustomerPageChange,
+    fetchClients,
+  ]);
   return (
     <Box>
       <Paper sx={{ mb: 2 }}>

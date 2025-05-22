@@ -15,16 +15,10 @@ import {
 import { getComparator, stableSort } from "./product_TableProps";
 import { EditProductModal } from "../product_modal/editProductModal.component";
 import { DeleteProductConFirmModal } from "../product_modal/deleteProductConfirm.component";
-import {
-  fetchProducts,
-  getSelectedIDs,
-  onFilteredProductPageChange,
-  onSearchedProductPageChange,
-} from "../../../actions/admin/productManagement.action";
-import { useDispatch, useSelector } from "react-redux";
 import { LoadingElementSmallComponent } from "../../misc/LoadingElementSmall.component";
 import { NoDataComponent } from "../../misc/DataNotFound.component";
 import { convertToCurrency } from "../../../utils/formatting";
+import { useProductManagementApi } from "@/hooks/api";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
@@ -49,7 +43,12 @@ export const ProductTableBody = ({
   setSelectedCell,
   dataRowLists,
 }) => {
-  const dispatch = useDispatch();
+  const {
+    fetchProducts,
+    getSelectedIDs,
+    onFilteredProductPageChange,
+    onSearchedProductPageChange,
+  } = useProductManagementApi();
   const {
     createProductPending,
     updateProductPending,
@@ -57,7 +56,7 @@ export const ProductTableBody = ({
     itemPerPage,
     isSearchOn,
     isFilterOn,
-  } = useSelector((reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS);
+  } = useProductManagementApi().state;
 
   const isSelected = (id) => selectedCell.indexOf(id) !== -1;
 
@@ -83,33 +82,35 @@ export const ProductTableBody = ({
       );
     }
     setSelectedCell(newSelected);
-    dispatch(getSelectedIDs(newSelected));
+    getSelectedIDs(newSelected);
   };
   React.useEffect(() => {
     if (deleteProductPending) {
       setSelectedCell([]);
-      dispatch(getSelectedIDs([]));
+      getSelectedIDs([]);
     }
-  }, [dispatch, deleteProductPending, setSelectedCell]);
+  }, [deleteProductPending, getSelectedIDs, setSelectedCell]);
 
   React.useEffect(() => {
     if (createProductPending || updateProductPending || deleteProductPending) {
       if (isSearchOn) {
-        dispatch(onSearchedProductPageChange(0, itemPerPage));
+        onSearchedProductPageChange(0, itemPerPage);
       } else if (isFilterOn) {
-        dispatch(onFilteredProductPageChange(0, itemPerPage));
+        onFilteredProductPageChange(0, itemPerPage);
       } else if (!isSearchOn && !isFilterOn) {
-        dispatch(fetchProducts(0, itemPerPage));
+        fetchProducts(0, itemPerPage);
       }
     }
   }, [
-    dispatch,
     createProductPending,
     itemPerPage,
     deleteProductPending,
     updateProductPending,
     isSearchOn,
     isFilterOn,
+    onSearchedProductPageChange,
+    onFilteredProductPageChange,
+    fetchProducts,
   ]);
   return (
     <TableBody>

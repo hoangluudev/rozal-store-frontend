@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { Close, CloudUpload } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { uploadMultipleImages } from "../../../../../actions/uploadImage.action";
+import { useUploadImageApi } from "@/hooks/api";
 
 const UploadMultipleImagesComponent = ({
   value = [],
@@ -20,10 +19,8 @@ const UploadMultipleImagesComponent = ({
   maxFiles = 5,
   uploadFolder = "example",
 }) => {
-  const dispatch = useDispatch();
-  const { uploadMultipleImagePending, imageUrls } = useSelector(
-    (reduxData) => reduxData.IMAGES_REDUCERS
-  );
+  const { uploadMultipleImages } = useUploadImageApi();
+  const { uploadMultipleImagePending, imageUrls } = useUploadImageApi().state;
 
   const [isMultipleFilesError, setIsMultipleFilesError] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(false);
@@ -44,7 +41,7 @@ const UploadMultipleImagesComponent = ({
     } else {
       const newFiles = [...acceptedFiles].slice(0, maxFiles - value.length);
       setSelectedFiles(newFiles);
-      dispatch(uploadMultipleImages(newFiles, uploadFolder));
+      uploadMultipleImages(newFiles, uploadFolder);
     }
   };
 

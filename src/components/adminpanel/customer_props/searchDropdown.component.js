@@ -9,18 +9,12 @@ import {
   Tooltip,
   Popover,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  onCustomerFilter,
-  onCustomerSearch,
-} from "../../../actions/admin/userManagement.action";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 export const CustomerSearchText = () => {
-  const { itemPerPage, isSearchOn } = useSelector(
-    (reduxData) => reduxData.USERS_ADMIN_REDUCERS
-  );
+  const { onCustomerFilter, onCustomerSearch } = useUserManagementApi();
+  const { itemPerPage, isSearchOn } = useUserManagementApi().state;
 
-  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [searchText, setSearchText] = React.useState("");
@@ -46,14 +40,14 @@ export const CustomerSearchText = () => {
   };
 
   const handleSubmitSearch = () => {
-    dispatch(onCustomerFilter(0, itemPerPage, {}));
-    dispatch(onCustomerSearch(0, itemPerPage, searchText));
+    onCustomerFilter(0, itemPerPage, {});
+    onCustomerSearch(0, itemPerPage, searchText);
     handleClose();
   };
 
   const handleResetSearchText = () => {
     setSearchText("");
-    dispatch(onCustomerSearch(0, itemPerPage, ""));
+    onCustomerSearch(0, itemPerPage, "");
   };
 
   return (

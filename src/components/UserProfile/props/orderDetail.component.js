@@ -18,21 +18,16 @@ import {
   DialogActions,
 } from "@mui/material";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  cancelOrderByID,
-  fetchOrderByID,
-} from "../../../actions/client/order.action";
+import {} from "../../../actions/client/order.action";
 import { useParams } from "react-router-dom";
 import { CheckCircle } from "@mui/icons-material";
 import { convertToCurrency, formatDatetime } from "../../../utils/formatting";
+import { useOrderApi } from "@/hooks/api";
 
 export const OrderDetail = () => {
   const { orderId } = useParams();
-  const dispatch = useDispatch();
-  const { selectedOrderData, cancelOrderByIDPending } = useSelector(
-    (reduxData) => reduxData.ORDER_REDUCERS
-  );
+  const { cancelOrderByID, fetchOrderByID } = useOrderApi;
+  const { selectedOrderData, cancelOrderByIDPending } = useOrderApi.state;
 
   const orderData = selectedOrderData || {};
   const progress = orderData.progress || [];
@@ -75,18 +70,18 @@ export const OrderDetail = () => {
 
   const handleCancelOrderSubmit = () => {
     handleClose();
-    dispatch(cancelOrderByID(orderData._id));
+    cancelOrderByID(orderData._id);
   };
 
   React.useEffect(() => {
-    dispatch(fetchOrderByID(orderId));
-  }, [dispatch, orderId]);
+    fetchOrderByID(orderId);
+  }, [fetchOrderByID, orderId]);
 
   React.useEffect(() => {
     if (cancelOrderByIDPending) {
-      dispatch(fetchOrderByID(orderId));
+      fetchOrderByID(orderId);
     }
-  }, [dispatch, cancelOrderByIDPending, orderId]);
+  }, [cancelOrderByIDPending, fetchOrderByID, orderId]);
 
   return (
     <Box sx={{ borderRadius: "1rem", padding: "1rem" }}>

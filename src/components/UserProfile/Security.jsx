@@ -13,18 +13,12 @@ import {
 } from "@mui/material";
 import { Check, Visibility, VisibilityOff } from "@mui/icons-material";
 import { ChangePasswordOTP } from "./dialog/ChangePasswordOTPVerify.component";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  changePasswordRequestOTP,
-  verifyOTPChangePassword,
-} from "../../actions/userProfile.action";
+import { useCurrentUserApi } from "@/hooks/api";
 
 export const UserSecurity = () => {
-  const dispatch = useDispatch();
-
-  const { isVerifyOTPChangePasswordValid } = useSelector(
-    (reduxData) => reduxData.USER_PROFILE_REDUCERS
-  );
+  const { changePasswordRequestOTP, verifyOTPChangePassword } =
+    useCurrentUserApi();
+  const { isVerifyOTPChangePasswordValid } = useCurrentUserApi().state;
 
   const [showPassword, setShowPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -64,10 +58,10 @@ export const UserSecurity = () => {
 
   const handleSubmitSendOTP = () => {
     setFormSubmitted(true);
-    dispatch(changePasswordRequestOTP(newPassword, confirmPassword));
+    changePasswordRequestOTP(newPassword, confirmPassword);
   };
   const handleSubmitVerifyOTP = () => {
-    dispatch(verifyOTPChangePassword(newPassword, otpCode));
+    verifyOTPChangePassword(newPassword, otpCode);
   };
 
   const getAvatarColor = (isValid) => {

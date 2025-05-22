@@ -1,33 +1,29 @@
 import { TablePagination } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchOrders,
-  onFilteredOrderPageChange,
-  onSearchedOrderPageChange,
-} from "../../../../actions/admin/orderManagement.action";
+import useOrderManagementApi from "@/hooks/api/useOrderManagementApi";
 
 export const OrderTablePagination = () => {
-  const dispatch = useDispatch();
+  const { fetchOrders, onFilteredOrderPageChange, onSearchedOrderPageChange } =
+    useOrderManagementApi();
   const { totalOrderCount, isFilterOn, isSearchOn, currentPage, itemPerPage } =
-    useSelector((reduxData) => reduxData.ORDERS_ADMIN_REDUCERS);
+    useOrderManagementApi().state;
 
   const handleChangePage = (event, newPage) => {
     if (isSearchOn) {
-      dispatch(onSearchedOrderPageChange(newPage, itemPerPage));
+      onSearchedOrderPageChange(newPage, itemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredOrderPageChange(newPage, itemPerPage));
+      onFilteredOrderPageChange(newPage, itemPerPage);
     } else {
-      dispatch(fetchOrders(newPage, itemPerPage));
+      fetchOrders(newPage, itemPerPage);
     }
   };
   const handleChangeRowsPerPage = (event) => {
     const gItemPerPage = parseInt(event.target.value, 10);
     if (isSearchOn) {
-      dispatch(onSearchedOrderPageChange(0, gItemPerPage));
+      onSearchedOrderPageChange(0, gItemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredOrderPageChange(0, gItemPerPage));
+      onFilteredOrderPageChange(0, gItemPerPage);
     } else {
-      dispatch(fetchOrders(0, gItemPerPage));
+      fetchOrders(0, gItemPerPage);
     }
   };
   return (

@@ -1,19 +1,18 @@
 import * as React from "react";
-import { useDispatch } from "react-redux";
-import { fetchDashboardStatistics } from "../../actions/admin/dashboard.action";
 import { Box, Grid, Typography } from "@mui/material";
 import { ProductCategoryPieChart } from "./dashboard_props/chartjs/ProductCategoryPieChart.component";
 import { OrderStatsDashBoard } from "./dashboard_props/order.component";
 import { OverviewDashboard } from "./dashboard_props/overview.component";
 import { SalesBarChart } from "./dashboard_props/chartjs/SalesBarChart.component";
 import { HorizontalBarChart } from "./dashboard_props/chartjs/TopSoldProducts.component";
+import { useDashboardApi } from "@/hooks/api";
 
 export const AdminDashboard = () => {
-  const dispatch = useDispatch();
+  const { fetchDashboardStatistics } = useDashboardApi();
 
   React.useEffect(() => {
-    dispatch(fetchDashboardStatistics());
-  }, [dispatch]);
+    fetchDashboardStatistics();
+  }, [fetchDashboardStatistics]);
   return (
     <React.Fragment>
       <Box style={{ marginBottom: "1rem" }}>

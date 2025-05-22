@@ -21,7 +21,7 @@ import {
   Typography,
 } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { useSelector } from "react-redux";
+import { useDashboardApi } from "@/hooks/api";
 
 ChartJS.register(
   CategoryScale,
@@ -33,9 +33,7 @@ ChartJS.register(
 );
 
 export const SalesBarChart = () => {
-  const { saleStatisticOverrall } = useSelector(
-    (reduxData) => reduxData.ADMIN_DASHBOARD_REDUCERS
-  );
+  const { saleStatisticOverrall } = useDashboardApi().state;
 
   const [selectedTab, setSelectedTab] = useState("sales");
 

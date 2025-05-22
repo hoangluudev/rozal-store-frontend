@@ -13,15 +13,13 @@ import {
   MenuItem,
 } from "@mui/material";
 import { EditNote } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { updateProductByID } from "../../../actions/admin/productManagement.action";
 import { EditProductForm } from "./props/editForm.component";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const EditProductModal = ({ selectedProductData }) => {
-  const dispatch = useDispatch();
-  const { updateProductPending } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS
-  );
+  const { updateProductByID } = useProductManagementApi();
+  const { updateProductPending } = useProductManagementApi().state;
+
   const gSelectedProduct = selectedProductData || {};
   const [openModal, setOpenModal] = React.useState(false);
   const [productData, setProductData] = React.useState({});
@@ -44,14 +42,14 @@ export const EditProductModal = ({ selectedProductData }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(updateProductByID(productData, gSelectedProduct.id));
+    updateProductByID(productData, gSelectedProduct.id);
   };
 
   React.useEffect(() => {
     if (updateProductPending) {
       handleCloseModal();
     }
-  }, [dispatch, updateProductPending]);
+  }, [updateProductPending]);
 
   React.useEffect(() => {
     if (selectedProductData) {

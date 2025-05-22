@@ -13,16 +13,12 @@ import {
   Menu,
 } from "@mui/material";
 import { FilterAlt } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  onProductFilter,
-  onProductSearch,
-} from "../../../actions/admin/productManagement.action";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const ProductFilterDropdown = () => {
-  const dispatch = useDispatch();
+  const { onProductFilter, onProductSearch } = useProductManagementApi();
   const { itemPerPage, productCategoryLists, productBrandLists, isFilterOn } =
-    useSelector((reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS);
+    useProductManagementApi().state;
 
   const categoryLists = productCategoryLists || [];
   const brandLists = productBrandLists || [];
@@ -84,7 +80,7 @@ export const ProductFilterDropdown = () => {
   };
 
   const handleClearFilter = () => {
-    dispatch(onProductFilter(0, itemPerPage, {}));
+    onProductFilter(0, itemPerPage, {});
     setGender("");
     setCategory("");
     setBrand("");
@@ -94,8 +90,8 @@ export const ProductFilterDropdown = () => {
     handleClose();
   };
   const handleSubmitFilter = async () => {
-    await dispatch(onProductSearch(0, itemPerPage, ""));
-    await dispatch(onProductFilter(0, itemPerPage, filterInput));
+    await onProductSearch(0, itemPerPage, "");
+    await onProductFilter(0, itemPerPage, filterInput);
     handleClose();
   };
 

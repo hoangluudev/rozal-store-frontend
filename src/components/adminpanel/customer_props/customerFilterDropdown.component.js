@@ -18,18 +18,13 @@ import { FilterAlt } from "@mui/icons-material";
 import { DateRangePicker } from "rsuite";
 import { predefinedRanges } from "./props/predefinedRanges";
 import "rsuite/dist/rsuite.min.css";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  onCustomerFilter,
-  onCustomerSearch,
-} from "../../../actions/admin/userManagement.action";
 import { formatDate } from "../../../utils/formatting";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 export const CustomerFilterDropdown = () => {
-  const dispatch = useDispatch();
-  const { itemPerPage, isFilterOn } = useSelector(
-    (reduxData) => reduxData.USERS_ADMIN_REDUCERS
-  );
+  const { onCustomerFilter, onCustomerSearch } = useUserManagementApi();
+  const { itemPerPage, isFilterOn } = useUserManagementApi().state;
+
   const theme = useTheme();
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -73,15 +68,15 @@ export const CustomerFilterDropdown = () => {
     }
   };
   const handleClearFilter = () => {
-    dispatch(onCustomerFilter(0, itemPerPage, {}));
+    onCustomerFilter(0, itemPerPage, {});
     setDateRange([]);
     setGender("");
     setFilterInput({});
     handleClose();
   };
   const handleSubmitFilter = async () => {
-    await dispatch(onCustomerSearch(0, itemPerPage, ""));
-    await dispatch(onCustomerFilter(0, itemPerPage, filterInput));
+    await onCustomerSearch(0, itemPerPage, "");
+    await onCustomerFilter(0, itemPerPage, filterInput);
     handleClose();
   };
 

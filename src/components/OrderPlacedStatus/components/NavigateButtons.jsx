@@ -1,8 +1,7 @@
 import React from "react";
 import { Box, Button, Link, Stack } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { createZaloPaymentRetryRequest } from "../../../actions/client/order.action";
 import ChangePaymentMethodDialog from "../../UserProfile/Order/components/ChangePaymentMethod";
+import { useOrderApi } from "@/hooks/api";
 
 const NavigateButtons = ({
   paymentStatus,
@@ -11,9 +10,10 @@ const NavigateButtons = ({
   orderURL = "#",
   shopURL = "#",
 }) => {
-  const dispatch = useDispatch();
+  const { createZaloPaymentRetryRequest } = useOrderApi();
+
   const handleRetryPayment = () => {
-    dispatch(createZaloPaymentRetryRequest(orderCode));
+    createZaloPaymentRetryRequest(orderCode);
   };
 
   return (
@@ -39,7 +39,7 @@ const NavigateButtons = ({
               >
                 Continue Shopping
               </Button>
-            </Link>     
+            </Link>
           </>
         ) : paymentStatus === "Pending" ? (
           <>

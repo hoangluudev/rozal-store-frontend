@@ -9,18 +9,12 @@ import {
   Tooltip,
   Popover,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  onProductFilter,
-  onProductSearch,
-} from "../../../actions/admin/productManagement.action";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const ProductSearchText = () => {
-  const { itemPerPage, isSearchOn } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS
-  );
+  const { onProductFilter, onProductSearch } = useProductManagementApi();
+  const { itemPerPage, isSearchOn } = useProductManagementApi().state;
 
-  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [searchText, setSearchText] = React.useState("");
@@ -46,14 +40,14 @@ export const ProductSearchText = () => {
   };
 
   const handleSubmitSearch = () => {
-    dispatch(onProductFilter(0, itemPerPage, {}));
-    dispatch(onProductSearch(0, itemPerPage, searchText));
+    onProductFilter(0, itemPerPage, {});
+    onProductSearch(0, itemPerPage, searchText);
     handleClose();
   };
 
   const handleResetSearchText = () => {
     setSearchText("");
-    dispatch(onProductSearch(0, itemPerPage, ""));
+    onProductSearch(0, itemPerPage, "");
   };
 
   return (

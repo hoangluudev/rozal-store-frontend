@@ -1,11 +1,11 @@
 import React from "react";
 import { FormControl, InputLabel } from "@mui/material";
 import { SelectComponent } from "../../../../common/Input";
-import { useSelector } from "react-redux";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const FilterFormComponent = ({ value, onChange }) => {
   const { categoryOptions, brandOptions, genderOptions, statusOptions } =
-    useSelector((reduxData) => reduxData.PRODUCT_ALPHA_ADMIN_REDUCERS);
+    useProductManagementApi().state;
 
   const onInputChange = (name, value) => {
     onChange((prevState) => ({

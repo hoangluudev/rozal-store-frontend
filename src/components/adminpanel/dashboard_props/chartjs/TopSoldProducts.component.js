@@ -9,13 +9,11 @@ import {
   Select,
   Stack,
   Typography,
-} from "@mui/material";
-import { useSelector } from "react-redux";
+} from "@mui/material"
+import { useDashboardApi } from "@/hooks/api";
 
 export const HorizontalBarChart = () => {
-  const { topSoldProduct } = useSelector(
-    (reduxData) => reduxData.ADMIN_DASHBOARD_REDUCERS
-  );
+  const { topSoldProduct } = useDashboardApi().state;
 
   const [selectedDataset, setSelectedDataset] = React.useState("_allTime");
 

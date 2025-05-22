@@ -1,33 +1,32 @@
 import { TablePagination } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchClients,
-  onFilteredCustomerPageChange,
-  onSearchedCustomerPageChange,
-} from "../../../../actions/admin/userManagement.action";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 export const CustomerTablePagination = () => {
-  const dispatch = useDispatch();
+  const {
+    fetchClients,
+    onFilteredCustomerPageChange,
+    onSearchedCustomerPageChange,
+  } = useUserManagementApi();
   const { totalClientCount, isFilterOn, isSearchOn, currentPage, itemPerPage } =
-    useSelector((reduxData) => reduxData.USERS_ADMIN_REDUCERS);
+    useUserManagementApi().state;
 
   const handleChangePage = (event, newPage) => {
     if (isSearchOn) {
-      dispatch(onSearchedCustomerPageChange(newPage, itemPerPage));
+      onSearchedCustomerPageChange(newPage, itemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredCustomerPageChange(newPage, itemPerPage));
+      onFilteredCustomerPageChange(newPage, itemPerPage);
     } else {
-      dispatch(fetchClients(newPage, itemPerPage));
+      fetchClients(newPage, itemPerPage);
     }
   };
   const handleChangeRowsPerPage = (event) => {
     const gItemPerPage = parseInt(event.target.value, 10);
     if (isSearchOn) {
-      dispatch(onSearchedCustomerPageChange(0, gItemPerPage));
+      onSearchedCustomerPageChange(0, gItemPerPage);
     } else if (isFilterOn) {
-      dispatch(onFilteredCustomerPageChange(0, gItemPerPage));
+      onFilteredCustomerPageChange(0, gItemPerPage);
     } else {
-      dispatch(fetchClients(0, gItemPerPage));
+      fetchClients(0, gItemPerPage);
     }
   };
   return (

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { TableBody, Checkbox, Typography, Stack } from "@mui/material";
 import {
   getComparator,
@@ -11,16 +10,12 @@ import {
 import { LoadingElementSmallComponent } from "../../../misc/LoadingElementSmall.component";
 import { NoDataComponent } from "../../../misc/DataNotFound.component";
 import { DeleteOneConfirmComponent } from "../../../common/Dialog/DeleteConfirm/SingleDeleteConfirm";
-import {
-  getSelectedIDs,
-  updateProductTypeByID,
-  deleteProductTypeByID,
-} from "../../../../actions/admin/category.action";
 import SwitchComponent from "../../../common/UI/Switch";
 import TypographyComponent from "../../../common/UI/Typography";
 import IconComponent from "../../../common/UI/Icon";
 import IconButtonComponent from "../../../common/UI/IconButton";
 import { EditNoteOutlined } from "@mui/icons-material";
+import { useCategoryApi } from "@/hooks/api";
 
 export const TableBodyComponent = ({
   selectedCell,
@@ -29,12 +24,13 @@ export const TableBodyComponent = ({
   setSelectedCell,
   dataRowLists,
 }) => {
-  const dispatch = useDispatch();
+  const { getSelectedIDs, updateProductTypeByID, deleteProductTypeByID } =
+    useCategoryApi();
   const {
     fetchProductTypePending,
     updateCategoryPending,
     isDeleteCategorySuccess,
-  } = useSelector((reduxData) => reduxData.CATEGORY_ADMIN_REDUCERS);
+  } = useCategoryApi().state;
 
   const isSelected = (id) => selectedCell.indexOf(id) !== -1;
 
@@ -60,21 +56,21 @@ export const TableBodyComponent = ({
       );
     }
     setSelectedCell(newSelected);
-    dispatch(getSelectedIDs(newSelected));
+    getSelectedIDs(newSelected);
   };
 
   const handleUpdateCategory = (value, paramID) => {
-    dispatch(updateProductTypeByID({ isPublished: value }, paramID));
+    updateProductTypeByID({ isPublished: value }, paramID);
   };
   const handleDeleteCateogry = (paramID) => {
-    dispatch(deleteProductTypeByID(paramID));
+    deleteProductTypeByID(paramID);
   };
   React.useEffect(() => {
     if (isDeleteCategorySuccess) {
       setSelectedCell([]);
-      dispatch(getSelectedIDs([]));
+      getSelectedIDs([]);
     }
-  }, [dispatch, isDeleteCategorySuccess, setSelectedCell]);
+  }, [getSelectedIDs, isDeleteCategorySuccess, setSelectedCell]);
   return (
     <TableBody>
       {visibleRows.map((row, index) => {

@@ -8,24 +8,18 @@ import {
   Button,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
 import AddressForm from "../UserProfile/forms/AddressForm.component";
-import {
-  createUserAddress,
-  fetchCity,
-  fetchDistrict,
-  fetchWard,
-} from "../../actions/userProfile.action";
+import { useCurrentUserApi, useLocationApi } from "@/hooks/api";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const AddDeliveryAddressDropdown = () => {
-  const dispatch = useDispatch();
-  const { createUserAddressSuccess } = useSelector(
-    (reduxData) => reduxData.USER_PROFILE_REDUCERS
-  );
+  const { fetchCity, fetchDistrict, fetchWard } = useLocationApi();
+  const { createUserAddress } = useCurrentUserApi();
+  const { createUserAddressSuccess } = useCurrentUserApi().state;
+
   const [isOpenDialog, setOpenDialog] = React.useState(false);
   const initialFormData = {
     fullName: "",
@@ -73,7 +67,7 @@ const AddDeliveryAddressDropdown = () => {
           ward_name: "",
         });
         if (value) {
-          dispatch(fetchDistrict(value));
+          fetchDistrict(value);
         }
         break;
       case "district":
@@ -88,7 +82,7 @@ const AddDeliveryAddressDropdown = () => {
           ward_name: "",
         }));
         if (value) {
-          dispatch(fetchWard(value));
+          fetchWard(value);
         }
         break;
       case "ward":
@@ -108,7 +102,7 @@ const AddDeliveryAddressDropdown = () => {
 
   const handleSubmit = () => {
     setFormSubmitted(true);
-    dispatch(createUserAddress(requestData));
+    createUserAddress(requestData);
   };
 
   React.useEffect(() => {
@@ -128,12 +122,12 @@ const AddDeliveryAddressDropdown = () => {
       setFormSubmitted(false);
       handleCloseDialog();
     }
-  }, [dispatch, createUserAddressSuccess]);
+  }, [createUserAddressSuccess]);
   React.useEffect(() => {
     if (isOpenDialog) {
-      dispatch(fetchCity());
+      fetchCity();
     }
-  }, [dispatch, isOpenDialog]);
+  }, [fetchCity, isOpenDialog]);
   return (
     <React.Fragment>
       <Button

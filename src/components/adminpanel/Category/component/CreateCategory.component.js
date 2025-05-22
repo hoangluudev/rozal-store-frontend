@@ -1,16 +1,14 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
 import { CategoryForm } from "./form/form.component";
-import { createCategory } from "../../../../actions/admin/category.action";
 import { NavFormComponent } from "../../../common/Layout";
 import { isEmptyObj } from "../../../../utils/formatting";
+import { useCategoryApi } from "@/hooks/api";
 
 export const CreateCategoryComponent = () => {
-  const dispatch = useDispatch();
-  const { isCreateCategorySuccess } = useSelector(
-    (reduxData) => reduxData.CATEGORY_ADMIN_REDUCERS
-  );
+  const { createCategory } = useCategoryApi();
+  const { isCreateCategorySuccess } = useCategoryApi().state;
+
   const initialFormData = {
     name: "",
     description: "",
@@ -37,7 +35,7 @@ export const CreateCategoryComponent = () => {
   };
   const handleSubmit = () => {
     setFormSubmitted(true);
-    dispatch(createCategory(requestData));
+    createCategory(requestData);
   };
 
   React.useEffect(() => {
@@ -51,7 +49,7 @@ export const CreateCategoryComponent = () => {
       });
       setFormSubmitted(false);
     }
-  }, [dispatch, isCreateCategorySuccess]);
+  }, [isCreateCategorySuccess]);
   return (
     <Box style={{ padding: "1rem" }}>
       <NavFormComponent

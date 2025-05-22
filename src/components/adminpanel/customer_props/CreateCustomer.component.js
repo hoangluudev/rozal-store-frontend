@@ -1,22 +1,19 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { CreateFormInput } from "./props/createForm.component";
-import { useDispatch, useSelector } from "react-redux";
-import { createCustomer } from "../../../actions/admin/userManagement.action";
-import { Link } from "react-router-dom";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 export const CreateCustomerComponent = () => {
-  const dispatch = useDispatch();
-  const { createCustomerPending } = useSelector(
-    (reduxData) => reduxData.USERS_ADMIN_REDUCERS
-  );
+  const { createCustomer } = useUserManagementApi();
+  const { createCustomerPending } = useUserManagementApi().state;
 
   const [userFormData, setUserFormData] = React.useState({});
   const [formSubmitted, setFormSubmitted] = React.useState(false);
 
   const handleSubmit = () => {
     setFormSubmitted(true);
-    dispatch(createCustomer(userFormData));
+    createCustomer(userFormData);
   };
 
   React.useEffect(() => {

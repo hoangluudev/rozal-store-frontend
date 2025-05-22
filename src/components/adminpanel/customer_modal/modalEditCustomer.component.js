@@ -16,8 +16,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { EditNote, CloudUpload } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { updateUserByID } from "../../../actions/admin/userManagement.action";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -32,10 +31,9 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export const ModalEditCustomer = ({ userData }) => {
-  const dispatch = useDispatch();
-  const { updateCustomerPending } = useSelector(
-    (reduxData) => reduxData.USERS_ADMIN_REDUCERS
-  );
+  const { updateUserByID } = useUserManagementApi();
+  const { updateCustomerPending } = useUserManagementApi().state;
+
   const gSelectedUser = userData || {};
   const [openModal, setOpenModal] = React.useState(false);
   const [userFormData, setUserFormData] = React.useState({});
@@ -102,7 +100,7 @@ export const ModalEditCustomer = ({ userData }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(updateUserByID(userFormData, gSelectedUser.id));
+    updateUserByID(userFormData, gSelectedUser.id);
   };
   React.useEffect(() => {
     if (userData) {
@@ -124,7 +122,7 @@ export const ModalEditCustomer = ({ userData }) => {
     if (updateCustomerPending) {
       handleCloseModal();
     }
-  }, [dispatch, updateCustomerPending]);
+  }, [updateCustomerPending]);
 
   return (
     <React.Fragment>

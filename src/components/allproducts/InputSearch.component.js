@@ -2,8 +2,8 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import { InputBase, IconButton, InputAdornment, Tooltip } from "@mui/material";
 import { Search as SearchIcon, Cancel } from "@mui/icons-material";
-import { useSelector } from "react-redux";
 import { useCustomSearchParams } from "../../hooks/useSearchParams";
+import { useProductApi } from "@/hooks/api";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -34,9 +34,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const SearchTextBox = () => {
-  const { isSearchOn, searchValue } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_REDUCERS
-  );
+  const { isSearchOn, searchValue } = useProductApi().state;
 
   const { setSearchParamsURLWithResetPage, removeSearchParamURL } =
     useCustomSearchParams();

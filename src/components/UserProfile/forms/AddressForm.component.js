@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import {
   Autocomplete,
   Box,
@@ -10,6 +9,7 @@ import {
 import { RadioButtonSelect, TextFieldComponent } from "../../common/Input";
 import { SwitchComponent } from "../../common/UI";
 import { FormFieldComponent } from "../../common/Layout";
+import { useLocationApi } from "@/hooks/api";
 
 const AddressForm = ({
   formData,
@@ -25,7 +25,7 @@ const AddressForm = ({
     districtDataLists,
     fetchWardPending,
     wardDataLists,
-  } = useSelector((reduxData) => reduxData.ADDRESS_REDUCERS);
+  } = useLocationApi().state;
 
   const onInputChange = (name, value) => {
     onChange((prevState) => ({

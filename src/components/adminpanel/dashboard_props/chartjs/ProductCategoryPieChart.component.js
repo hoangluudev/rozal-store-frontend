@@ -2,14 +2,12 @@ import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Box, Container, Paper, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDashboardApi } from "@/hooks/api";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const ProductCategoryPieChart = () => {
-  const { totalProductEachCategory } = useSelector(
-    (reduxData) => reduxData.ADMIN_DASHBOARD_REDUCERS
-  );
+  const { totalProductEachCategory } = useDashboardApi().state;
 
   const categoryListLabels = totalProductEachCategory
     ? totalProductEachCategory.label

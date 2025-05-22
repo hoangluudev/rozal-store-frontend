@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { Box, AppBar, Stack, Toolbar, Typography } from "@mui/material";
 import ProductElevationScroll from "./props/filternavbar";
 import PaginationSection from "./pagination.component";
@@ -10,25 +9,24 @@ import SelectItemPerPage from "./selectItemPerPage.component";
 import ProductSortBySelect from "./SortProduct.component";
 import { handleScrollToTop } from "../../services/scrollToTop";
 import { AllFilterDropdown } from "./dropdown/filterdropdown.component";
-import { fetchProductsWithFilter } from "../../actions/product.action";
 import { searchParamsToObject } from "../../utils/helperFunctions";
 import { useCustomSearchParams } from "../../hooks/useSearchParams";
+import { useProductApi } from "@/hooks/api";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
 const AllProductSection = () => {
-  const dispatch = useDispatch();
+  const { fetchProductsWithFilter } = useProductApi();
+  const { totalProductCount, isSearchOn, isFilterOn } = useProductApi().state;
   const query = useQuery();
   const { setSearchParamsURLWithResetPage } = useCustomSearchParams();
 
   const updateSearchParams = (newParams, newPage) => {
     setSearchParamsURLWithResetPage(newParams, newPage);
   };
-  const { totalProductCount, isSearchOn, isFilterOn } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_REDUCERS
-  );
+
   const currentFilterData = searchParamsToObject(query);
   const [filterData, setFilterData] = React.useState(currentFilterData);
 
@@ -42,8 +40,8 @@ const AllProductSection = () => {
   const filterValue = window.location.search;
 
   React.useEffect(() => {
-    dispatch(fetchProductsWithFilter(filterValue));
-  }, [dispatch, filterValue]);
+    fetchProductsWithFilter(filterValue);
+  }, [fetchProductsWithFilter, filterValue]);
 
   return (
     <Box className="product-section mt-3">

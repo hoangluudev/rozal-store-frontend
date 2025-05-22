@@ -1,21 +1,17 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
-import {
-  fetchProductTypeByID,
-  updateProductTypeByID,
-} from "../../../../actions/admin/category.action";
 import { NavFormComponent } from "../../../common/Layout";
 import { isEmptyObj } from "../../../../utils/formatting";
 import { useParams } from "react-router-dom";
 import { ProductTypeForm } from "./form/form.component";
+import { useCategoryApi } from "@/hooks/api";
 
 export const EditProductTypeComponent = () => {
-  const dispatch = useDispatch();
+  const { fetchProductTypeByID, updateProductTypeByID } = useCategoryApi();
+  const { selectedProductTypeData, isUpdateCategorySuccess } =
+    useCategoryApi().state;
   const { productTypeId } = useParams();
-  const { selectedProductTypeData, isUpdateCategorySuccess } = useSelector(
-    (reduxData) => reduxData.CATEGORY_ADMIN_REDUCERS
-  );
+
   const initialFormData = {
     name: "",
     categoryId: "",
@@ -38,7 +34,7 @@ export const EditProductTypeComponent = () => {
   };
   const handleSubmit = () => {
     setFormSubmitted(true);
-    dispatch(updateProductTypeByID(requestData, selectedProductTypeData._id));
+    updateProductTypeByID(requestData, selectedProductTypeData._id);
   };
 
   React.useEffect(() => {
@@ -53,8 +49,8 @@ export const EditProductTypeComponent = () => {
     }
   }, [isUpdateCategorySuccess]);
   React.useEffect(() => {
-    dispatch(fetchProductTypeByID(productTypeId));
-  }, [dispatch, productTypeId]);
+    fetchProductTypeByID(productTypeId);
+  }, [fetchProductTypeByID, productTypeId]);
   return (
     <Box style={{ padding: "1rem" }}>
       <NavFormComponent

@@ -14,19 +14,17 @@ import {
   CameraAlt as CameraAltIcon,
   CloudUpload as CloudUploadIcon,
 } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { uploadSingleImage } from "../../../../../actions/uploadImage.action";
-import { DividerComponent } from "../../../UI";
+import { useUploadImageApi } from "@/hooks/api";
+import DividerComponent from "@/components/common/UI/Divider";
 
 const UploadSingleImageComponent = ({
   value = null,
   onChange,
   uploadFolder = "example",
 }) => {
-  const dispatch = useDispatch();
-  const { imageUrl, uploadImagePending } = useSelector(
-    (reduxData) => reduxData.IMAGES_REDUCERS
-  );
+  const { uploadSingleImage } = useUploadImageApi();
+  const { imageUrl, uploadImagePending } = useUploadImageApi().state;
+
   const [isMultipleFilesError, setIsMultipleFilesError] = useState(false);
   const [fileSizeError, setFileSizeError] = useState(false);
   const [fileTypeError, setFileTypeError] = useState(false);
@@ -46,7 +44,7 @@ const UploadSingleImageComponent = ({
       const file = acceptedFiles[0];
       if (file) {
         setSelectedFile(file);
-        dispatch(uploadSingleImage(file, uploadFolder));
+        uploadSingleImage(file, uploadFolder);
       }
     }
   };

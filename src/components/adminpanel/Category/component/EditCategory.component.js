@@ -1,21 +1,16 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/material";
-import {
-  fetchCategoryByID,
-  updateCategoryByID,
-} from "../../../../actions/admin/category.action";
 import { NavFormComponent } from "../../../common/Layout";
 import { isEmptyObj } from "../../../../utils/formatting";
 import { CategoryForm } from "./form/form.component";
+import { useCategoryApi } from "@/hooks/api";
 
 export const EditCategoryComponent = () => {
-  const dispatch = useDispatch();
+  const { fetchCategoryByID, updateCategoryByID } = useCategoryApi();
+  const { selectedCategoryData, isUpdateCategorySuccess } =
+    useCategoryApi().state;
   const { categoryId } = useParams();
-  const { selectedCategoryData, isUpdateCategorySuccess } = useSelector(
-    (reduxData) => reduxData.CATEGORY_ADMIN_REDUCERS
-  );
 
   const initialFormData = {
     name: "",
@@ -41,12 +36,12 @@ export const EditCategoryComponent = () => {
 
   const handleSubmit = () => {
     setFormSubmitted(true);
-    dispatch(updateCategoryByID(requestData, selectedCategoryData._id));
+    updateCategoryByID(requestData, selectedCategoryData._id);
   };
 
   React.useEffect(() => {
-    dispatch(fetchCategoryByID(categoryId));
-  }, [dispatch, categoryId]);
+    fetchCategoryByID(categoryId);
+  }, [categoryId, fetchCategoryByID]);
   React.useEffect(() => {
     if (!isEmptyObj(selectedCategoryData)) {
       setFormData(selectedCategoryData);

@@ -4,13 +4,10 @@ import { useCallback } from "react";
 
 const useDashboardApi = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state.dashboardReducer);
-  const fetchDashboardStatisticsCb = useCallback(
-    (data) => {
-      dispatch(fetchDashboardStatistics(data));
-    },
-    [dispatch]
-  );
+  const state = useSelector((state) => state.adminDashboardReducer);
+  const fetchDashboardStatisticsCb = useCallback(() => {
+    dispatch(fetchDashboardStatistics());
+  }, [dispatch]);
   return {
     state,
     fetchDashboardStatistics: fetchDashboardStatisticsCb,

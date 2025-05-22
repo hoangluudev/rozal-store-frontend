@@ -8,12 +8,11 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useProductApi } from "@/hooks/api";
 
 export const BrandFilter = ({ selectedValue, onChange }) => {
-  const { productBrandLists } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_REDUCERS
-  );
+  const { productBrandLists } = useProductApi().state;
+
   const brandItems = productBrandLists || [];
 
   const handleBrandChange = (value) => {

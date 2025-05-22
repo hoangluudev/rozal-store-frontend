@@ -10,14 +10,13 @@ import {
   IconButton,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { deleteMultipleProductByID } from "../../../actions/admin/productManagement.action";
-import { useDispatch, useSelector } from "react-redux";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const DeleteMultiProductModal = () => {
-  const dispatch = useDispatch();
-  const { deleteProductPending, selectedProductIDs } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS
-  );
+  const { deleteMultipleProductByID } = useProductManagementApi();
+  const { deleteProductPending, selectedProductIDs } =
+    useProductManagementApi().state;
+
   const [openModal, setOpenDeleteModal] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -27,13 +26,13 @@ export const DeleteMultiProductModal = () => {
     setOpenDeleteModal(false);
   };
   const handleSubmitDelete = () => {
-    dispatch(deleteMultipleProductByID(selectedProductIDs));
+    deleteMultipleProductByID(selectedProductIDs);
   };
   React.useEffect(() => {
     if (deleteProductPending) {
       handleClose();
     }
-  }, [dispatch, deleteProductPending]);
+  }, [deleteProductPending]);
   return (
     <React.Fragment>
       <Tooltip title="Delete Products">

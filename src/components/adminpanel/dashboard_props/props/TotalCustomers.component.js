@@ -1,12 +1,10 @@
 import * as React from "react";
 import { Card, CardContent, Stack, Typography } from "@mui/material";
 import { Groups } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDashboardApi } from "@/hooks/api";
 
 export const TotalCustomer = () => {
-  const { totalClientCount } = useSelector(
-    (reduxData) => reduxData.ADMIN_DASHBOARD_REDUCERS
-  );
+  const { totalClientCount } = useDashboardApi().state;
 
   let textColor = "#fff";
   let backgroundColor = "#2196f3";

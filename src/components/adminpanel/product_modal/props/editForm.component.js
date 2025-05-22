@@ -18,8 +18,8 @@ import {
   Typography,
 } from "@mui/material";
 import { CloudUpload } from "@mui/icons-material";
-import { useSelector } from "react-redux";
 import { ProductFormDescription } from "../../product_props/props/ProductDescription.component";
+import { useProductManagementApi } from "@/hooks/api";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -34,9 +34,9 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export const EditProductForm = ({ onChange, selectedProductData }) => {
-  const { productCategoryLists, productBrandLists } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_ADMIN_REDUCERS
-  );
+  const { productCategoryLists, productBrandLists } =
+    useProductManagementApi().state;
+
   const gSelectedProduct = selectedProductData || {};
 
   const initialCategoryList = productCategoryLists || [];

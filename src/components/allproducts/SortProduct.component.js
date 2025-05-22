@@ -1,8 +1,8 @@
 import React from "react";
 import { MenuItem, FormControl, Select, InputLabel } from "@mui/material";
-import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useCustomSearchParams } from "../../hooks/useSearchParams";
+import { useProductApi } from "@/hooks/api";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -22,7 +22,7 @@ const ProductSortBySelect = () => {
     fetchProductPending,
     productSearchPending,
     productPending,
-  } = useSelector((reduxData) => reduxData.PRODUCTS_REDUCERS);
+  } = useProductApi().state;
 
   const selectedSortOption = filterValue.sort_by || "";
 

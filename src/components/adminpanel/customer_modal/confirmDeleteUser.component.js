@@ -8,11 +8,11 @@ import {
   Button,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { deleteUserByID } from "../../../actions/admin/userManagement.action";
-import { useDispatch } from "react-redux";
+import useUserManagementApi from "@/hooks/api/useUserManagementApi";
 
 export const ModalConfirmDeleteUser = ({ userID }) => {
-  const dispatch = useDispatch();
+  const { deleteUserByID } = useUserManagementApi();
+
   const [openModal, setOpenDeleteModal] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -22,7 +22,7 @@ export const ModalConfirmDeleteUser = ({ userID }) => {
     setOpenDeleteModal(false);
   };
   const handleSubmitDelete = () => {
-    dispatch(deleteUserByID(userID));
+    deleteUserByID(userID);
   };
   return (
     <React.Fragment>

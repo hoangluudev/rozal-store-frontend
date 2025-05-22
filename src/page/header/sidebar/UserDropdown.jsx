@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Avatar,
   Box,
@@ -13,9 +13,7 @@ import {
   ShoppingCartOutlined,
   FavoriteBorderOutlined,
   SettingsOutlined,
-  AccountCircle,
   LogoutOutlined,
-  LoginOutlined,
   AdminPanelSettings,
   Person,
 } from "@mui/icons-material";
@@ -26,44 +24,7 @@ import {
 } from "../../../components/common/UI";
 import { removeAccessToken } from "../../../services/tokenService";
 import { useCurrentUserApi, useUserAuthApi } from "../../../hooks/api";
-
-const CustomMenuItem = ({ icon, label, path, onClick, ...props }) => {
-  return (
-    <Link
-      href={path}
-      style={{
-        textDecoration: "none",
-        color: "inherit",
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
-      }}
-      onClick={onClick}
-    >
-      <MenuItem
-        sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          border: "1px solid transparent",
-          borderRadius: "5px",
-          "&:hover": {
-            backgroundColor: "#f5f5f5",
-            borderColor: (theme) => theme.palette.error.light,
-            color: (theme) => theme.palette.error.main,
-            "& .MuiSvgIcon-root": {
-              color: (theme) => theme.palette.error.main,
-            },
-          },
-        }}
-        {...props}
-      >
-        {icon}
-        <Typography sx={{ marginLeft: 1 }}>{label}</Typography>
-      </MenuItem>
-    </Link>
-  );
-};
+import { useNavigate } from "react-router-dom";
 
 const loggedInMenuItems = [
   { label: "View profile", path: "/user/profile", icon: <PersonOutlined /> },
@@ -72,37 +33,71 @@ const loggedInMenuItems = [
   { label: "Setting", path: "#", icon: <SettingsOutlined /> },
 ];
 
-const loggedOutMenuItems = [
-  { label: "Login", path: "/login", icon: <LoginOutlined /> },
-  { label: "Sign Up", path: "/sign-up", icon: <AccountCircle /> },
-];
+const CustomMenuItem = ({ icon, label, path, onClick }) => (
+  <Link
+    href={path}
+    style={{
+      textDecoration: "none",
+      color: "inherit",
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
+    }}
+    onClick={onClick}
+  >
+    <MenuItem
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        borderRadius: "5px",
+        "&:hover": {
+          backgroundColor: "#f5f5f5",
+          borderColor: (theme) => theme.palette.error.light,
+          color: (theme) => theme.palette.error.main,
+          "& .MuiSvgIcon-root": {
+            color: (theme) => theme.palette.error.main,
+          },
+        },
+      }}
+    >
+      {icon}
+      <Typography sx={{ marginLeft: 1 }}>{label}</Typography>
+    </MenuItem>
+  </Link>
+);
 
 const UserDropdown = () => {
+  const navigate = useNavigate();
   const { onUserLogout } = useUserAuthApi();
   const { currentUserData, isAdminRole } = useCurrentUserApi().state;
-
   const isLoggedIn = !isEmptyObj(currentUserData);
-  const [isOpenDropdown, setOpenDropdown] = useState(null);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleOpenDropdown = (event) => {
-    setOpenDropdown(event.currentTarget);
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+    setAnchorEl(event.currentTarget);
   };
 
   const handleCloseDropdown = () => {
-    setOpenDropdown(null);
+    setAnchorEl(null);
   };
 
   const handleLogOut = () => {
     onUserLogout();
-    handleCloseDropdown();
     removeAccessToken();
+    handleCloseDropdown();
   };
 
-  const menuItems = isLoggedIn ? (
+  const renderMenuItems = () => (
     <Box>
-      {loggedInMenuItems.map((item, index) => (
+      {loggedInMenuItems.map((item, idx) => (
         <CustomMenuItem
-          key={index}
+          key={idx}
           path={item.path}
           icon={item.icon}
           label={item.label}
@@ -127,22 +122,10 @@ const UserDropdown = () => {
         onClick={handleLogOut}
       />
     </Box>
-  ) : (
-    <Box>
-      {loggedOutMenuItems.map((item, index) => (
-        <CustomMenuItem
-          key={index}
-          path={item.path}
-          icon={item.icon}
-          label={item.label}
-          onClick={handleCloseDropdown}
-        />
-      ))}
-    </Box>
   );
 
   return (
-    <React.Fragment>
+    <>
       <IconButtonComponent
         color="inherit"
         hoverColor="error"
@@ -151,106 +134,64 @@ const UserDropdown = () => {
             <Avatar
               alt=""
               src={currentUserData.profileImage}
-              sx={{
-                width: 30,
-                height: 30,
-              }}
+              sx={{ width: 30, height: 30 }}
             />
           ) : (
             <Person color="inherit" />
           )
         }
         onClick={handleOpenDropdown}
-        sx={{
-          display: { xs: "none", sm: "block" },
-        }}
+        sx={{ display: { xs: "none", sm: "block" } }}
       />
 
-      <Menu
-        anchorEl={isOpenDropdown}
-        open={Boolean(isOpenDropdown)}
-        onClose={handleCloseDropdown}
-        keepMounted
-        disableScrollLock={true}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        slotProps={{
-          paper: {
-            sx: {
-              maxWidth: 300,
-              p: 2,
-            },
-          },
-        }}
-        sx={{
-          ul: {
-            py: 0,
-          },
-        }}
-      >
-        {isLoggedIn && currentUserData && (
-          <Box
-            sx={{
-              mb: 1,
-            }}
-          >
+      {isLoggedIn && (
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleCloseDropdown}
+          keepMounted
+          disableScrollLock
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          slotProps={{ paper: { sx: { maxWidth: 300, p: 2 } } }}
+          sx={{ ul: { py: 0 } }}
+        >
+          <Box sx={{ mb: 1 }}>
             <Stack
-              flexDirection="row"
+              direction="row"
               alignItems="center"
-              columnGap={1}
-              sx={{
-                p: 1,
-                maxWidth: "100%",
-              }}
+              spacing={1}
+              sx={{ p: 1 }}
             >
-              {currentUserData.profileImage ? (
-                <Avatar alt="" src={currentUserData.profileImage} />
-              ) : (
-                <Avatar alt="Profile Picture">
-                  {convertToShortLetter(currentUserData.fullName)}
-                </Avatar>
-              )}
+              <Avatar src={currentUserData?.profileImage}>
+                {!currentUserData?.profileImage &&
+                  convertToShortLetter(currentUserData.fullName)}
+              </Avatar>
               <Box>
                 <Typography
-                  fontSize={{ xs: "12px", sm: "14px" }}
+                  fontSize="14px"
                   fontWeight={600}
-                  sx={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
+                  noWrap
                   maxWidth={200}
                 >
-                  {currentUserData?.fullName}
+                  {currentUserData.fullName}
                 </Typography>
                 <Typography
-                  variant="body2"
-                  fontSize={{ xs: "11px", sm: "13px" }}
+                  fontSize="13px"
                   color="textSecondary"
-                  sx={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
+                  noWrap
                   maxWidth={200}
                 >
-                  {currentUserData?.email}
+                  {currentUserData.email}
                 </Typography>
               </Box>
             </Stack>
             <DividerComponent />
           </Box>
-        )}
-
-        {menuItems}
-      </Menu>
-    </React.Fragment>
+          {renderMenuItems()}
+        </Menu>
+      )}
+    </>
   );
 };
 

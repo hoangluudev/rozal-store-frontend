@@ -10,8 +10,3 @@ export { default as useCurrentUserApi } from "./useCurrentUserApi";
 export { default as userUserManagementApi } from "./useUserManagementApi";
 export { default as useUploadImageApi } from "./useUploadImageApi";
 export { default as useUserAuthApi } from "./useUserAuthApi";
-
-/* 
-    Refactored list
-
-*/

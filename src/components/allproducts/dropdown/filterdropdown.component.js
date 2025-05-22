@@ -20,21 +20,19 @@ import {
   ArrowDropUp,
   RestartAlt,
 } from "@mui/icons-material";
-import { useSelector } from "react-redux";
 import { CategoryFilter } from "../props/category.component";
 import { PriceRangeFilter } from "../props/price.component";
 import { BrandFilter } from "../props/brand.component";
 import { GenderFilter } from "../props/gender.component";
 import { useCustomSearchParams } from "../../../hooks/useSearchParams";
+import { useProductApi } from "@/hooks/api";
 
 export const AllFilterDropdown = ({
   filterData,
   setFilterData,
   onSubmitFilter,
 }) => {
-  const { isFilterOn, filterValue, productLists } = useSelector(
-    (reduxData) => reduxData.PRODUCTS_REDUCERS
-  );
+  const { isFilterOn, filterValue, productLists } = useProductApi().state;
 
   const { resetSearchParamURL, removeSearchParamURL } = useCustomSearchParams();
 

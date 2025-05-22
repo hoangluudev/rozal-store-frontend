@@ -12,17 +12,12 @@ import {
 } from "@mui/material";
 import { AddCircle, Autorenew } from "@mui/icons-material";
 import { createData, EnhancedTableHead } from "./props/TableDataset";
-import {
-  deleteMultipleProductTypeByID,
-  fetchProductType,
-  getSelectedIDs,
-} from "../../../actions/admin/category.action";
-import { useDispatch, useSelector } from "react-redux";
 import { TablePaginationComponent, TypographyComponent } from "../../common/UI";
 import { SearchParamsDropdown } from "../../common/Input";
 import { Link, useLocation } from "react-router-dom";
 import { TableBodyComponent } from "./props/TableBody";
 import { DeleteMultipleConfirmComponent } from "../../common/Dialog/DeleteConfirm/MultipleDeleteConfirm";
+import { useCategoryApi } from "@/hooks/api";
 
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
@@ -34,8 +29,8 @@ EnhancedTableHead.propTypes = {
 };
 
 export const ManageProductType = () => {
-  const dispatch = useDispatch();
-  const location = useLocation();
+  const { deleteMultipleProductTypeByID, fetchProductType, getSelectedIDs } =
+    useCategoryApi();
   const {
     productTypeDataLists,
     selectedProductTypeIDs,
@@ -47,7 +42,8 @@ export const ManageProductType = () => {
     itemPerPage,
     isSearchOn,
     searchValue,
-  } = useSelector((reduxData) => reduxData.CATEGORY_ADMIN_REDUCERS);
+  } = useCategoryApi().state;
+  const location = useLocation();
 
   const filterValue = location.search;
 
@@ -56,14 +52,13 @@ export const ManageProductType = () => {
   const [selectedCell, setSelectedCell] = React.useState([]);
 
   const EnhancedTableToolbar = (props) => {
-    const dispatch = useDispatch();
     const { numSelected } = props;
 
     const handleRefresh = () => {
-      dispatch(fetchProductType(filterValue));
+      fetchProductType(filterValue);
     };
     const handleDeleteMultiple = () => {
-      dispatch(deleteMultipleProductTypeByID(selectedProductTypeIDs));
+      deleteMultipleProductTypeByID(selectedProductTypeIDs);
     };
     return (
       <Toolbar
@@ -163,21 +158,26 @@ export const ManageProductType = () => {
     if (event.target.checked) {
       const newSelected = renderLists.map((n) => n.id);
       setSelectedCell(newSelected);
-      dispatch(getSelectedIDs(newSelected));
+      getSelectedIDs(newSelected);
       return;
     }
     setSelectedCell([]);
-    dispatch(getSelectedIDs([]));
+    getSelectedIDs([]);
   };
 
   React.useEffect(() => {
-    dispatch(fetchProductType(filterValue));
-  }, [dispatch, filterValue]);
+    fetchProductType(filterValue);
+  }, [fetchProductType, filterValue]);
   React.useEffect(() => {
     if (isUpdateCategorySuccess || isDeleteCategorySuccess) {
-      dispatch(fetchProductType(filterValue));
+      fetchProductType(filterValue);
     }
-  }, [dispatch, filterValue, isUpdateCategorySuccess, isDeleteCategorySuccess]);
+  }, [
+    filterValue,
+    isUpdateCategorySuccess,
+    isDeleteCategorySuccess,
+    fetchProductType,
+  ]);
 
   return (
     <Box>

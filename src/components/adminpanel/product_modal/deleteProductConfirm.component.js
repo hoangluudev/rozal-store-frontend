@@ -8,11 +8,10 @@ import {
   Button,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { deleteProductByID } from "../../../actions/admin/productManagement.action";
-import { useDispatch } from "react-redux";
+import { useProductManagementApi } from "@/hooks/api";
 
 export const DeleteProductConFirmModal = ({ selectedProductID }) => {
-  const dispatch = useDispatch();
+  const { deleteProductByID } = useProductManagementApi();
 
   const [openModal, setOpenDeleteModal] = React.useState(false);
 
@@ -23,7 +22,7 @@ export const DeleteProductConFirmModal = ({ selectedProductID }) => {
     setOpenDeleteModal(false);
   };
   const handleSubmitDelete = () => {
-    dispatch(deleteProductByID(selectedProductID));
+    deleteProductByID(selectedProductID);
   };
   return (
     <React.Fragment>
